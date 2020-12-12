@@ -1,0 +1,25 @@
+
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+$as: '#FFF22';
+
+body{
+    // background-image: url('../image/bg.png');
+}
+
+.image{
+    img{
+        width: 100em;
+    }
+}
+
+#navbarNav{
+    font-size: 2.5rem;
+}
