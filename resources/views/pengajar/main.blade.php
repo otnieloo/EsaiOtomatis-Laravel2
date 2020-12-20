@@ -19,6 +19,10 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    
+
+    {{-- Datetime picker --}}
+    <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 </head>
 
@@ -429,6 +433,23 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+
+    {{-- Datetime picker --}}
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
+
+    {{-- Custom JS --}}
+    <script type="text/javascript">
+        var date = new Date();
+        var date2 = new Date();
+        var end_date = date2.setDate(date2.getDate()+90);
+        $(".form_datetime").datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            todayBtn: true,
+            autoclose:true,
+            startDate: date,
+            endDate: date2
+        });
+    </script>
 
 </body>
 

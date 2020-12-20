@@ -18,17 +18,16 @@
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <form>
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">Email address</label>
-                              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            <div class="form-group col-3">
+                                <label for="nama">Nama Ujian</label>
+                                <input type="text" class="form-control" id="nama" aria-describedby="emailHelp" placeholder="" name="nama">
                             </div>
-                            <div class="form-group">
-                              <label for="exampleInputPassword1">Password</label>
-                              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            <div class="form-group col-3">
+                                <label for="jadwal">Jadwal</label>
+                                <input size="16" type="text" readonly class="form-control form_datetime" name="jadwal">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
-                          </form>
+                        </form>
                     </div>
                 </div>
 
