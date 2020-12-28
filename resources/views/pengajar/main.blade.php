@@ -439,16 +439,55 @@
 
     {{-- Custom JS --}}
     <script type="text/javascript">
+        // Date time picker
         var date = new Date();
         var date2 = new Date();
         var end_date = date2.setDate(date2.getDate()+90);
+        $(".form_datetime").val(date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate()+" "+date.getHours()+":"+(date.getMinutes() < 10 ? '0' : '') + date.getMinutes());
         $(".form_datetime").datetimepicker({
             format: 'yyyy-mm-dd hh:ii',
             todayBtn: true,
             autoclose:true,
             startDate: date,
-            endDate: date2
+            endDate: date2,
+            todayHighlight: true
         });
+
+        $(document).ready(function() {
+            // Dynamic input buat soal
+            $("#add").click(function() {
+                var lastField = $("#buildyourform div:last");
+                var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
+                var fieldWrapper = $("<div class=\"fieldwrapper form-group d-flex flex-column\" id=\"field" + intId + "\" />");
+                fieldWrapper.data("idx", intId);
+                var fName = $("<label for=\"soal\">Soal</label><input id=\"soal\" type=\"text\" class=\"form-control fieldname col-6\" name=\"soal[]\" required />");
+                var fName2 = $("<label for=\"jawaban\">Jawaban</label><textarea id=\"jawaban\" class=\"form-control fieldname col-7\" rows=\"6\" name=\"jawaban[]\" required />");
+                var removeButton = $("<button type=\"button\" class=\" mt-3 btn btn-danger remove col-1\"  >Hapus</button>");
+                removeButton.click(function() {
+                    $(this).parent().remove();
+                });
+                fieldWrapper.append(fName);
+                fieldWrapper.append(fName2);
+                fieldWrapper.append(removeButton);
+                $("#buildyourform").append(fieldWrapper);
+                $("#field"+intId+" #soal").trigger('focus');
+
+            });
+            // Preview soal
+            $("#submitSoal").submit(function(e){
+                e.preventDefault();
+                var values = $(this).serializeArray();
+                var nama = $("<p>Nama: "+values[0]+" </p>");
+                var jadwal = $("<p>Jadwal: "+values[1]+" </p>");
+                // $("#modalPreview modal-body").append(nama);
+                // $("#modalPreview modal-body").append(jadwal);
+                // $("#modalPreview").modal('show');
+            });
+           
+        });
+
+
+
     </script>
 
 </body>
