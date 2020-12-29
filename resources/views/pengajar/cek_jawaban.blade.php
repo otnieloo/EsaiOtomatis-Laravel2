@@ -53,6 +53,10 @@
                                 
                             </table>
                         </div>
+                        <div class="nextPrevButton mx-auto">
+                            <button class="btn btn-primary">Previous</button>
+                            <button class="btn btn-primary">Next</button>
+                        </div>
                     </div>
                 </div>
 
