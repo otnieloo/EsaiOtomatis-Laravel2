@@ -23,12 +23,26 @@ Route::get('/register', function () {
     return view('front/register');
 });
 
+// Pengajar
+
 Route::get('/pengajar', function () {
     return view('pengajar/home');
 });
 
 Route::get('/buat_ujian', function () {
     return view('pengajar/buat_ujian');
+});
+
+Route::get('/hasil_ujian', function () {
+    return view('pengajar/hasil_ujian');
+});
+
+Route::get('/cek_ujian', function () {
+    return view('pengajar/cek_ujian');
+});
+
+Route::get('/cek_jawaban', function () {
+    return view('pengajar/cek_jawaban');
 });
 
 Route::get('/sb', function () {
