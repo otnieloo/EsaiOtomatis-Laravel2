@@ -1,0 +1,10 @@
+.enrollUjian{
+    width: 20%;
+    border: 3px solid lightgray;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}

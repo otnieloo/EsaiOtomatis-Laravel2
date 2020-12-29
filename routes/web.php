@@ -45,6 +45,23 @@ Route::get('/cek_jawaban', function () {
     return view('pengajar/cek_jawaban');
 });
 
+// Siswa
+Route::get('/siswa', function () {
+    return view('siswa/home');
+});
+
+Route::get('/enroll', function () {
+    return view('siswa/enroll_ujian');
+});
+
+Route::get('/lihat_ujian', function () {
+    return view('siswa/lihat_ujian');
+});
+
+Route::get('/isi_soal', function () {
+    return view('siswa/isi_soal');
+});
+
 Route::get('/sb', function () {
     return view('sb_index');
 });
