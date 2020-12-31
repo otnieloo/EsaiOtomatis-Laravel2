@@ -15,13 +15,13 @@ Route::get('/', function () {
     return view('front/home');
 });
 
-Route::get('/login', function () {
-    return view('front/login');
-});
+Route::get('/login', 'AccountController@index');
 
-Route::get('/register', function () {
-    return view('front/register');
-});
+Route::post('/login', 'AccountController@login');
+
+Route::get('/register', 'AccountController@create');
+
+Route::post('/register', 'AccountController@store');
 
 // Pengajar
 

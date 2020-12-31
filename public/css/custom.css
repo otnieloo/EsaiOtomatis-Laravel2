@@ -122,3 +122,8 @@ a.login-button{
     background-color: #92B5F9 !important;
     font-size: 1rem;
 }
+
+#roleRegister, #roleLogin{
+    font-size: .8rem;
+    border-radius: 10rem;
+}

@@ -13,35 +13,54 @@
                         <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                         <div class="col-lg-6">
                             <div class="p-5">
+                                @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                @if (session('failed_exist'))
+                                    <div class="alert alert-danger">
+                                        {{ session('failed_exist') }}
+                                    </div>
+                                @endif
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
-                                <form class="user">
+                                <form class="user" action="/login" method="post">
+                                    {{csrf_field()}}
                                     <div class="form-group">
-                                        <input type="email" class="form-control form-control-user"
+                                        <input name="email" type="email" class="form-control form-control-user"
                                             id="exampleInputEmail" aria-describedby="emailHelp"
                                             placeholder="Enter Email Address...">
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input name="password" type="password" class="form-control form-control-user"
                                             id="exampleInputPassword" placeholder="Password">
                                     </div>
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox small">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <label class="custom-control-label" for="customCheck">Remember
-                                                Me</label>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-primary btn-user btn-block login-button">
+                                    <select name="role" id="roleLogin" class="custom-select mb-3">
+                                        <option value="" selected>Pilih Role</option>
+                                        <option value="1">Pengajar</option>
+                                        <option value="2">Siswa</option>                                       
+                                    </select>
+
+                                    <button type="submit" class="btn btn-primary btn-user btn-block login-button">
                                         Login
-                                    </a>
+                                    </button>
                                     <hr>
                                 </form>
                                 <hr>
-                                <div class="text-center">
+                                {{-- <div class="text-center">
                                     <a class="small" href="#">Forgot Password?</a>
-                                </div>
+                                </div> --}}
                                 <div class="text-center">
                                     <a class="small" href="/register">Create an Account!</a>
                                 </div>
