@@ -19,19 +19,19 @@ Route::get('/login', 'AccountController@index');
 
 Route::post('/login', 'AccountController@login');
 
+Route::post('/logout', 'AccountController@logout');
+
 Route::get('/register', 'AccountController@create');
 
 Route::post('/register', 'AccountController@store');
 
 // Pengajar
 
-Route::get('/pengajar', function () {
-    return view('pengajar/home');
-});
+Route::get('/pengajar', 'PengajarController@index');
 
-Route::get('/buat_ujian', function () {
-    return view('pengajar/buat_ujian');
-});
+Route::get('/buat_ujian', 'PengajarController@buatUjian');
+
+Route::post('/buat_ujian', 'PengajarController@store');
 
 Route::get('/hasil_ujian', function () {
     return view('pengajar/hasil_ujian');

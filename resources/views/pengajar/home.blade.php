@@ -110,18 +110,27 @@
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="ujianTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama Ujian</th>
+                                        <th scope="col">Jumlah Soal</th>
+                                        <th scope="col">Kode Ujian</th>
+                                        <th scope="col">Jadwal</th>
+                                        <th scope="col">Jumlah Siswa</th>
                                     </tr>
                                 </thead>
-                                
+                                @foreach($ujian AS $u)
+                                <tr>
+                                    <th scope="row">{{$loop->iteration}}</th>
+                                    <td>{{$u->nama}}</td>
+                                    <td>{{$u->jumlah_soal}}</td>
+                                    <td>{{$u->kode_ujian}}</td>
+                                    <td>{{$u->jadwal}}</td>
+                                    <td>xx</td>
+                                  </tr>
+                                @endforeach
                             </table>
                         </div>
                     </div>

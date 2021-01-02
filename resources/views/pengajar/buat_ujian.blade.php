@@ -17,26 +17,69 @@
             <div class="container-fluid">
                 <div class="card shadow mb-4">
                     <div class="card-body">
-                        <form id="submitSoal">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        <form method="post" action="/buat_ujian">
+                            {{csrf_field()}}
                             <div class="topWrap d-flex">
                                 <div class="form-group col-3">
                                     <label for="nama">Nama Ujian</label>
-                                    <input type="text" class="form-control" id="nama" aria-describedby="emailHelp" placeholder="" name="nama" required>
+                                    <input type="text" class="form-control" id="nama" aria-describedby="emailHelp" placeholder="" name="nama" value="{{old('nama')}}">
                                 </div>
                                 <div class="form-group col-3">
                                     <label for="jadwal">Jadwal</label>
-                                    <input size="16" type="text" readonly class="form-control form_datetime" name="jadwal" required>
+                                    <input size="16" type="text" readonly class="form-control form_datetime" name="jadwal" value="{{old('jadwal')}}">
                                 </div>
                             </div>
 
                             <div class="form-group col-12">
                                 <h2>Buat Soal dan Kunci Jawaban</h2>
-                                <div class="fieldwrapper form-group d-flex flex-column" id="field">
-                                    <label for="soal">Soal</label>
-                                    <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" required />
-                                    <label for="jawaban">Jawaban</label>
-                                    <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" required></textarea>
-                                </div>
+                                @if(old('soal', null) != null)
+                                    @foreach(old('soal') as $s)
+                                        @if($s != '' && old('jawaban.'.(($loop->iteration)-1)) != '')
+                                            <div class="fieldwrapper form-group d-flex flex-column" id="field">
+                                                <label for="soal">Soal</label>
+                                                <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" value="{{$s}}" />
+                                                <label for="jawaban">Jawaban</label>
+                                                <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" >{{old('jawaban.'.(($loop->iteration)-1))}}</textarea>
+                                            </div>
+                                        @elseif($s != '' && old('jawaban.'.(($loop->iteration)-1)) == '')
+                                            <div class="fieldwrapper form-group d-flex flex-column" id="field">
+                                                <label for="soal">Soal</label>
+                                                <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" value="{{$s}}" />
+                                                <label for="jawaban">Jawaban</label>
+                                                <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" ></textarea>
+                                            </div>
+                                        @elseif($s == '' && old('jawaban.'.(($loop->iteration)-1)) != '')
+                                            <div class="fieldwrapper form-group d-flex flex-column" id="field">
+                                                <label for="soal">Soal</label>
+                                                <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" value="{{$s}}" />
+                                                <label for="jawaban">Jawaban</label>
+                                                <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" >{{old('jawaban.'.(($loop->iteration)-1))}}</textarea>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <div class="fieldwrapper form-group d-flex flex-column" id="field">
+                                        <label for="soal">Soal</label>
+                                        <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" />
+                                        <label for="jawaban">Jawaban</label>
+                                        <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" ></textarea>
+                                    </div>
+                                @endif
+    
 
                                 <fieldset id="buildyourform">
                                     {{-- <legend>Tambahkan Soal</legend> --}}

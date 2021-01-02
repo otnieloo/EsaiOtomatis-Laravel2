@@ -152,6 +152,10 @@ class AccountController extends Controller
                 return redirect('/login')->with('failed_exist','Doesnt match our records.'); 
             }
 
+            // Session
+            $request->session()->put('role','1');
+            $request->session()->put('email',$request->email);
+
             return redirect('/pengajar'); 
 
         }else{
@@ -168,7 +172,22 @@ class AccountController extends Controller
                 return redirect('/login')->with('failed_exist','Doesnt match our records.'); 
             }
 
+            // Session
+            $request->session()->put('role','2');
+            $request->session()->put('email',$request->email);
+            
             return redirect('/siswa');  
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        $response = array(
+            'status' => 'success',
+            'msg' => $request->message,
+        );
+        return response()->json($response); 
+
     }
 }

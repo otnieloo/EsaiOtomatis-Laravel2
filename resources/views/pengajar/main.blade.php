@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Pengajar</title>
 
@@ -20,6 +21,8 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     
+    {{-- Datatable --}}
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
 
     {{-- Datetime picker --}}
     <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
@@ -272,7 +275,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $pengajar[0]->nama }}</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -344,7 +347,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-primary" type="button" id="logoutButton">Logout</button>
                 </div>
             </div>
         </div>
@@ -361,40 +364,56 @@
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    {{-- <script src="vendor/chart.js/Chart.min.js"></script> --}}
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    {{-- <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script> --}}
 
     {{-- Datetime picker --}}
     <script src="js/bootstrap-datetimepicker.min.js"></script>
 
+    {{-- Datatable --}}
+    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+    {{-- Jquery Validation --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.min.js"></script>
+
     {{-- Custom JS --}}
     <script type="text/javascript">
-        // Date time picker
-        var date = new Date();
-        var date2 = new Date();
-        var end_date = date2.setDate(date2.getDate()+90);
-        $(".form_datetime").val(date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate()+" "+date.getHours()+":"+(date.getMinutes() < 10 ? '0' : '') + date.getMinutes());
-        $(".form_datetime").datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',
-            todayBtn: true,
-            autoclose:true,
-            startDate: date,
-            endDate: date2,
-            todayHighlight: true
-        });
 
         $(document).ready(function() {
+
+            // Date time picker
+            var date = new Date();
+            var date2 = new Date();
+            var end_date = date2.setDate(date2.getDate()+90);
+            
+            $(".form_datetime").val(date.getFullYear()+"-"+(date.getMonth() < 10 ? '0':'')+(date.getMonth()+1)+"-"+(date.getDate() < 10 ? '0':'')+date.getDate()+" "+date.getHours()+":"+(date.getMinutes() < 10   ? '0' : '') + date.getMinutes());
+            
+            $(".form_datetime").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii',
+                todayBtn: true,
+                autoclose:true,
+                startDate: date,
+                endDate: date2,
+                todayHighlight: true
+            });
+
+            // For datatable
+            $(document).ready( function () {
+                $('#ujianTable').DataTable();
+            } );
+
             // Dynamic input buat soal
             $("#add").click(function() {
                 var lastField = $("#buildyourform div:last");
                 var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                 var fieldWrapper = $("<div class=\"fieldwrapper form-group d-flex flex-column\" id=\"field" + intId + "\" />");
                 fieldWrapper.data("idx", intId);
-                var fName = $("<label for=\"soal\">Soal</label><input id=\"soal\" type=\"text\" class=\"form-control fieldname col-6\" name=\"soal[]\" required />");
-                var fName2 = $("<label for=\"jawaban\">Jawaban</label><textarea id=\"jawaban\" class=\"form-control fieldname col-7\" rows=\"6\" name=\"jawaban[]\" required />");
+                var fName = $("<label for=\"soal\">Soal</label><input id=\"soal\" type=\"text\" class=\"form-control fieldname col-6\" name=\"soal[]\" />");
+                var fName2 = $("<label for=\"jawaban\">Jawaban</label><textarea id=\"jawaban\" class=\"form-control fieldname col-7\" rows=\"6\" name=\"jawaban[]\" />");
                 var removeButton = $("<button type=\"button\" class=\" mt-3 btn btn-danger remove col-1\"  >Hapus</button>");
                 removeButton.click(function() {
                     $(this).parent().remove();
@@ -406,17 +425,62 @@
                 $("#field"+intId+" #soal").trigger('focus');
 
             });
+
             // Preview soal
-            $("#submitSoal").submit(function(e){
-                e.preventDefault();
-                var values = $(this).serializeArray();
-                var nama = $("<p>Nama: "+values[0]+" </p>");
-                var jadwal = $("<p>Jadwal: "+values[1]+" </p>");
-                // $("#modalPreview modal-body").append(nama);
-                // $("#modalPreview modal-body").append(jadwal);
-                // $("#modalPreview").modal('show');
-            });
+            // $("#submitSoal").validate({
+            //     rules: {
+            //         nama: {
+            //             required: true
+            //         },
+            //         jadwal: {
+            //             required: true
+            //         }                },
+            //     messages:{
+            //         nama: 'Masukkan nama',
+            //         jadwal: 'Pilih jadwal'
+            //     }
+            // });
+            // $('[name^="soal"]').each(function() {
+            //     console.log('found 1');
+            //     $(this).rules('add', {
+            //         required: true,
+            //     });
+            // });
+            // $('[name^="jawaban"]').each(function() {
+            //     console.log('found 1');
+            //     $(this).rules('add', {
+            //         required: true,
+            //     });
+            // });
+
+            // $("#submitSoal").submit(function(e){
+            //     e.preventDefault();
+            //     var values = $(this).serializeArray();
+            //     var nama = $("<p>Nama: "+values[0]+" </p>");
+            //     var jadwal = $("<p>Jadwal: "+values[1]+" </p>");
+            //     // $("#modalPreview modal-body").append(nama);
+            //     // $("#modalPreview modal-body").append(jadwal);
+            //     // $("#modalPreview").modal('show');
+            // });
            
+            // AJAX
+            // Logout
+            $("#logoutButton").click(function(){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    /* the route pointing to the post function */
+                    url: '/logout',
+                    type: 'POST',
+                    /* send the csrf-token and the input to the controller */
+                    data: {_token: CSRF_TOKEN, message:'logout'},
+                    dataType: 'JSON',
+                    /* remind that 'data' is the response of the AjaxController */
+                    success: function (data) { 
+                        console.log(data.msg);
+                        window.location.replace("/login");
+                    }
+                }); 
+            });
         });
 
 
