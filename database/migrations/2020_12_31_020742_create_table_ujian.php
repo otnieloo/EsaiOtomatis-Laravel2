@@ -20,6 +20,8 @@ class CreateTableUjian extends Migration
             $table->integer('id_pengajar');
             $table->string('kode_ujian');
             $table->dateTime('jadwal');
+            $table->dateTime('jadwal_selesai');
+            $table->integer('durasi');
             $table->string('status',1)->default(0);
             $table->timestamps();
         });

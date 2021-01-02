@@ -118,7 +118,11 @@
                                         <th scope="col">Jumlah Soal</th>
                                         <th scope="col">Kode Ujian</th>
                                         <th scope="col">Jadwal</th>
+                                        <th scope="col">Jadwal Selesai</th>
+                                        <th scope="col">Durasi</th>
                                         <th scope="col">Jumlah Siswa</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 @foreach($ujian AS $u)
@@ -128,6 +132,29 @@
                                     <td>{{$u->jumlah_soal}}</td>
                                     <td>{{$u->kode_ujian}}</td>
                                     <td>{{$u->jadwal}}</td>
+                                    <td>{{$u->jadwal_selesai}}</td>
+                                    <td>{{$u->durasi.' menit'}}</td>
+                                    <td>xx</td>
+                                    <td>
+                                        @switch($u->status)
+                                            @case(1)
+                                                <div class="badge badge-success">Ongoing</div>
+                                                <div class="badge badge-info">
+                                                    <a href="/edit_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-edit"></i></a>
+                                                </div>
+                                                <div class="badge badge-danger">
+                                                    <a href="/hapus_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-trash-alt"></i></a>
+                                                </div>
+                                                
+                                                @break
+                                            @case(2)
+                                                <div class="badge badge-danger">Ended</div>
+                                                @break
+                                            @default
+                                                <div class="badge badge-warning">Pending</div>
+                                                @break
+                                        @endswitch
+                                    </td>
                                     <td>xx</td>
                                   </tr>
                                 @endforeach

@@ -7,6 +7,8 @@ use App\Exam;
 use App\Question;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use DateTime;
+use DateInterval;
 
 class PengajarController extends Controller
 {
@@ -18,14 +20,13 @@ class PengajarController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('CheckLogin');
         $this->middleware(function ($request, $next) {
+            
             if($request->session()->get('role') != 1){
                 return redirect('/login')->with('failed_exist','Not authorized!');
             }
 
             $this->pengajar = Teacher::where('email',$request->session()->get('email'))->get();
-
            return $next($request);
      });
     }
@@ -40,6 +41,7 @@ class PengajarController extends Controller
 
         // Data ujian berdasarkan id pengajar
         $pengajar = $this->pengajar;
+        // dd($pengajar);
         $ujian = Exam::where('id_pengajar',$pengajar[0]->id_pengajar)->get();
 
         return view('pengajar.home',compact('ujian','pengajar'));
@@ -57,6 +59,42 @@ class PengajarController extends Controller
         $pengajar = $this->pengajar;
         return view('pengajar.buat_ujian',compact('pengajar'));
     }
+
+    /**
+     * Display view halaman edit ujian
+     * 
+     * @return void
+     * 
+     */
+
+    public function editUjian($id,Request $request)
+    {
+        $pengajar = $this->pengajar;
+        $ujian = Exam::where('id_ujian',$id)->get();
+
+        if(!isset($ujian[0])){
+            switch($request->session()->get('role')){
+                case '1':
+                    return redirect('/pengajar');
+                    break;
+                case '2':
+                    return redirect('/siswa');
+                    break;
+                default:
+                    return redirect('/');
+                    break;
+            }
+        }
+
+        $ujian = $ujian[0];
+
+        // Soal dan jawaban
+        $soal = Question::where('id_ujian',$ujian->id_ujian)->get();
+
+        return view('pengajar.edit_ujian',compact('pengajar','ujian','soal'));
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -79,9 +117,9 @@ class PengajarController extends Controller
         $validatedData = $request->validate([
             'nama' => 'required',
             'jadwal' => 'required',
+            'durasi' => 'required | numeric | min: 10 | max: 180',
             'soal.*' => 'required',
             'jawaban.*' => 'required',
-            // 'role' => 'required',
         ]);
 
         // Generate kode ujian
@@ -90,9 +128,18 @@ class PengajarController extends Controller
             $kode_ujian = str_random(5);
         }
 
+        // Calculate jadwal selesai
+
+        $time = new DateTime($request->jadwal);
+        $time->add(new DateInterval('PT' . $request->durasi . 'M'));
+
+        $jadwal_selesai = $time->format('Y-m-d H:i');
+
         $data = [
             'nama' => $request->nama,
             'jadwal' => $request->jadwal,
+            'jadwal_selesai' => $jadwal_selesai,
+            'durasi' => $request->durasi,
             'jumlah_soal' => count(collect($request)->get('soal')),
             'id_pengajar' => $this->pengajar[0]->id_pengajar,
             'kode_ujian' => $kode_ujian,
@@ -173,6 +220,7 @@ class PengajarController extends Controller
     public function update(Request $request, Teacher $teacher)
     {
         //
+        
     }
 
     /**

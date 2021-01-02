@@ -33,6 +33,10 @@ Route::get('/buat_ujian', 'PengajarController@buatUjian');
 
 Route::post('/buat_ujian', 'PengajarController@store');
 
+Route::get('/edit_ujian/{id}', 'PengajarController@editUjian');
+
+Route::post('/edit_ujian', 'PengajarController@update');
+
 Route::get('/hasil_ujian', function () {
     return view('pengajar/hasil_ujian');
 });

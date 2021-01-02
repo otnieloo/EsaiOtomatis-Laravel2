@@ -6,9 +6,7 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Buat Ujian</h1>
-            {{-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
+            <h1 class="h3 mb-0 text-gray-800">Edit Ujian</h1>
         </div>
 
         <!-- Content Row -->
@@ -31,20 +29,21 @@
                                 {{ session('success') }}
                             </div>
                         @endif
-                        <form method="post" action="/buat_ujian">
+                        <form method="post" action="/edit_ujian">
                             {{csrf_field()}}
+                            <input type="hidden" name="id_ujian" value={{$ujian->id_ujian}}>
                             <div class="topWrap d-flex">
                                 <div class="form-group col-3">
                                     <label for="nama">Nama Ujian</label>
-                                    <input type="text" class="form-control" id="nama" aria-describedby="emailHelp" placeholder="" name="nama" value="{{old('nama')}}">
+                                    <input type="text" class="form-control" id="nama" aria-describedby="emailHelp" placeholder="" name="nama" value="{{$ujian->nama}}">
                                 </div>
                                 <div class="form-group col-3">
                                     <label for="jadwal">Jadwal</label>
-                                    <input size="16" type="text" readonly class="form-control form_datetime" name="jadwal" value="{{old('jadwal')}}">
+                                    <input size="16" type="text" readonly class="form-control form_datetime" name="jadwal" value="{{$ujian->jadwal}}">
                                 </div>
                                 <div class="form-group col-3">
                                     <label for="durasi">Durasi (10-180 menit)</label>
-                                    <input type="number" class="form-control " name="durasi" value="{{old('durasi')}}">
+                                    <input type="number" class="form-control " name="durasi" value="{{$ujian->durasi}}">
                                 </div>
                             </div>
 
@@ -76,12 +75,15 @@
                                         @endif
                                     @endforeach
                                 @else
-                                    <div class="fieldwrapper form-group d-flex flex-column" id="field">
-                                        <label for="soal">Soal</label>
-                                        <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" />
-                                        <label for="jawaban">Jawaban</label>
-                                        <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" ></textarea>
-                                    </div>
+                                    @foreach($soal as $s)
+                                        <div class="fieldwrapper form-group d-flex flex-column" id="field">
+                                            <label for="soal">Soal</label>
+                                            <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" value="{{$s->pertanyaan}}" />
+                                            <label for="jawaban">Jawaban</label>
+                                            <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" >{{$s->kunci_jawaban}}</textarea>
+                                        </div>
+                                    @endforeach
+
                                 @endif
     
 
