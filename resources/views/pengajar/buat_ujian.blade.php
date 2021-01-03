@@ -146,6 +146,11 @@
             </div>
         </div>
     </div>
-  
+    <script defer>
+        document.addEventListener('DOMContentLoaded',function(){
+            var date = new Date();
+            $(".form_datetime").val(date.getFullYear()+"-"+(date.getMonth() < 10 ? '0':'')+(date.getMonth()+1)+"-"+(date.getDate() < 10 ? '0':'')+date.getDate()+" "+date.getHours()+":"+(date.getMinutes() < 10   ? '0' : '') + date.getMinutes());
+        });
+    </script>
     <!-- /.container-fluid -->  
 @endsection

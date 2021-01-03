@@ -29,8 +29,9 @@
                                 {{ session('success') }}
                             </div>
                         @endif
-                        <form method="post" action="/edit_ujian">
+                        <form method="post" action="/edit_ujian/{{$ujian->id_ujian}}">
                             {{csrf_field()}}
+                            {{method_field('PATCH')}}
                             <input type="hidden" name="id_ujian" value={{$ujian->id_ujian}}>
                             <div class="topWrap d-flex">
                                 <div class="form-group col-3">
@@ -75,12 +76,19 @@
                                         @endif
                                     @endforeach
                                 @else
+                                    @php
+                                        $count=0;    
+                                    @endphp
                                     @foreach($soal as $s)
                                         <div class="fieldwrapper form-group d-flex flex-column" id="field">
                                             <label for="soal">Soal</label>
                                             <input id="soal" type="text" class="form-control fieldname col-6" name="soal[]" value="{{$s->pertanyaan}}" />
                                             <label for="jawaban">Jawaban</label>
                                             <textarea id="jawaban" class="form-control fieldname col-7" rows="6" name="jawaban[]" >{{$s->kunci_jawaban}}</textarea>
+                                            @if($count != 0)    
+                                                <button type="button" class="mt-3 btn btn-danger remove col-1"  >Hapus</button>
+                                            @endif
+                                            @php $count++; @endphp
                                         </div>
                                     @endforeach
 
@@ -148,6 +156,5 @@
             </div>
         </div>
     </div>
-  
     <!-- /.container-fluid -->  
 @endsection

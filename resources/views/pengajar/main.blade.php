@@ -27,8 +27,12 @@
     {{-- Datetime picker --}}
     <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
-    {{-- Fontawesome kit --}}
-    <script src="https://kit.fontawesome.com/3da8e125df.js" crossorigin="anonymous"></script>
+
+    {{-- Select2 plugin --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    
+    {{-- Custom css --}}
+    <link rel="stylesheet" href="/css/pengajar.css">
 
 </head>
 
@@ -356,6 +360,31 @@
         </div>
     </div>
 
+    <!-- Delete Modal-->
+    <div class="modal fade" id="hapusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Anda yakin untuk menghapus <span id="hapusNamaUjian"></span> ?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Data yang telah dihapus tidak dapat dikembalikan.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <form action="/hapus_ujian" method="post">
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE')}}
+                        <input type="hidden" name="id_ujian" id="idUjianHapus">
+                        <button type="submit" class="btn btn-danger" type="button" id="hapusButton">Hapus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -383,6 +412,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.min.js"></script>
 
+    {{-- Select2 Plugin --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    {{-- Fontawesome kit --}}
+    <script src="https://kit.fontawesome.com/3da8e125df.js" crossorigin="anonymous"></script>
+    
+
     {{-- Custom JS --}}
     <script type="text/javascript">
 
@@ -392,8 +428,6 @@
             var date = new Date();
             var date2 = new Date();
             var end_date = date2.setDate(date2.getDate()+90);
-            
-            $(".form_datetime").val(date.getFullYear()+"-"+(date.getMonth() < 10 ? '0':'')+(date.getMonth()+1)+"-"+(date.getDate() < 10 ? '0':'')+date.getDate()+" "+date.getHours()+":"+(date.getMinutes() < 10   ? '0' : '') + date.getMinutes());
             
             $(".form_datetime").datetimepicker({
                 format: 'yyyy-mm-dd hh:ii',
@@ -408,6 +442,12 @@
             $(document).ready( function () {
                 $('#ujianTable').DataTable();
             } );
+
+            // Remove button
+            $('.remove').click(function(){
+                console.log('clicked');
+                $(this).parent().remove();
+            });
 
             // Dynamic input buat soal
             $("#add").click(function() {
@@ -465,7 +505,25 @@
             //     // $("#modalPreview modal-body").append(jadwal);
             //     // $("#modalPreview").modal('show');
             // });
-           
+            
+            // Delete modal
+            $('.deleteBtn').click(function(e){
+                var id = $(this).attr('data-id');
+                var nama = $(this).attr('data-nama');
+                $('#hapusNamaUjian').text(nama);
+                $('#idUjianHapus').val(id);
+                $('#hapusModal').modal('show');
+            });
+
+            // Select2
+            $('#pilihUjian').select2();
+
+            // Pilih ujian
+            $('#pilihUjian').change(()=>{
+                var id = $('#pilihUjian').val();
+                window.location.replace('/hasil_ujian/'+id);
+            });
+
             // AJAX
             // Logout
             $("#logoutButton").click(function(){

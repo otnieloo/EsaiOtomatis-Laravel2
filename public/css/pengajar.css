@@ -1,0 +1,8 @@
+.infoTable td,th{
+    font-size: 1rem;
+    padding: 10px;
+}
+
+.infoTable tr{
+    /* border-bottom: 1px solid gray; */
+}

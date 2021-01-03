@@ -35,11 +35,12 @@ Route::post('/buat_ujian', 'PengajarController@store');
 
 Route::get('/edit_ujian/{id}', 'PengajarController@editUjian');
 
-Route::post('/edit_ujian', 'PengajarController@update');
+Route::patch('/edit_ujian/{id}', 'PengajarController@update');
 
-Route::get('/hasil_ujian', function () {
-    return view('pengajar/hasil_ujian');
-});
+Route::delete('/hapus_ujian', 'PengajarController@destroy');
+
+Route::get('/hasil_ujian/{id}', 'PengajarController@hasilUjian');
+Route::get('/hasil_ujian', 'PengajarController@hasilUjian');
 
 Route::get('/cek_ujian', function () {
     return view('pengajar/cek_ujian');

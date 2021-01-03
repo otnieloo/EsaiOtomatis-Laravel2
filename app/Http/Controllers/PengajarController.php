@@ -42,7 +42,9 @@ class PengajarController extends Controller
         // Data ujian berdasarkan id pengajar
         $pengajar = $this->pengajar;
         // dd($pengajar);
-        $ujian = Exam::where('id_pengajar',$pengajar[0]->id_pengajar)->get();
+        $ujian = Exam::where('id_pengajar',$pengajar[0]->id_pengajar)
+            ->orderBy('created_at','desc')
+            ->get();
 
         return view('pengajar.home',compact('ujian','pengajar'));
     }
@@ -67,23 +69,59 @@ class PengajarController extends Controller
      * 
      */
 
+    public function hasilUjian($id = null)
+    {
+        $pengajar = $this->pengajar;
+        $exam = Exam::where('id_pengajar',$pengajar[0]->id_pengajar)->get();
+        
+        if(is_null($id)){
+            return view('pengajar.hasil_ujian',compact('pengajar','exam'));
+        }
+
+        // Cek id yang diakses sesuai dengan id ujian
+
+        
+        $examInfo = Exam::where('id_pengajar',$pengajar[0]->id_pengajar)
+                    ->where('id_ujian',$id)
+                    ->get();
+        
+        if(!isset($examInfo[0])){
+            return redirect('/hasil_ujian');
+        }
+
+        try{
+            $question = Question::where('id_ujian',$id)->get();
+        }catch(QueryException $e){
+            dd($e->errorInfo);
+        }
+
+        return view('pengajar.hasil_ujian',compact('pengajar','exam','examInfo','question'));
+    }
+
+    /**
+     * Display view halaman edit ujian
+     * 
+     * @return void
+     * 
+     */
+
     public function editUjian($id,Request $request)
     {
         $pengajar = $this->pengajar;
         $ujian = Exam::where('id_ujian',$id)->get();
-
+        
         if(!isset($ujian[0])){
-            switch($request->session()->get('role')){
-                case '1':
-                    return redirect('/pengajar');
-                    break;
-                case '2':
-                    return redirect('/siswa');
-                    break;
-                default:
-                    return redirect('/');
-                    break;
-            }
+            return redirect('/pengajar');  
+        }
+        
+        // Cek ujian di edit oleh pengajar yang sama
+        if($ujian[0]->id_pengajar != $pengajar[0]->id_pengajar){
+            return redirect('/pengajar');  
+        }
+        
+        // Cek status ujian
+        if($ujian[0]->status != '0'){
+            return redirect('/pengajar')->with('failed','Ujian sudah dimulai.');  
         }
 
         $ujian = $ujian[0];
@@ -179,13 +217,8 @@ class PengajarController extends Controller
             }
 
         }catch(QueryException $e){
-
+            dd($e->errorInfo);
         }
- 
-
-
-
-        // dd($request->all());
     }
 
     /**
@@ -211,6 +244,7 @@ class PengajarController extends Controller
     }
 
     /**
+     * 
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -218,9 +252,81 @@ class PengajarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Teacher $teacher)
-    {
+    {   
+        $ujian = Exam::where('id_ujian',$request->id_ujian)->get();
         //
-        
+        if(!isset($ujian[0])){
+            return redirect('/pengajar');
+        }
+
+        if($ujian[0]->status != 0){
+            return redirect('/pengajar')->with('failed','Ujian sudah dimulai.');  
+        }
+
+        $validatedData = $request->validate([
+            'nama' => 'required',
+            'jadwal' => 'required',
+            'durasi' => 'required | numeric | min: 10 | max: 180',
+            'soal.*' => 'required',
+            'jawaban.*' => 'required',
+        ]);
+
+        // Calculate jadwal selesai
+
+        $time = new DateTime($request->jadwal);
+        $time->add(new DateInterval('PT' . $request->durasi . 'M'));
+
+        $jadwal_selesai = $time->format('Y-m-d H:i');
+
+        $data = [
+            'nama' => $request->nama,
+            'jadwal' => $request->jadwal,
+            'jadwal_selesai' => $jadwal_selesai,
+            'durasi' => $request->durasi,
+            'jumlah_soal' => count(collect($request)->get('soal')),
+            'id_pengajar' => $this->pengajar[0]->id_pengajar,
+            'kode_ujian' => $ujian[0]->kode_ujian,
+        ];
+
+        // Insert to exams table
+        try{
+            Exam::where('id_ujian',$ujian[0]->id_ujian)
+                        ->update($data);
+
+        }catch(QueryException $e){
+            dd($e->errorInfo);
+        }
+
+        // Insert to questions table with id_ujian
+        try{
+            
+            if(isset($ujian[0])){
+                $id_ujian = $ujian[0]->id_ujian;
+                $count = 0;
+
+                // Hapus pertanyaan dan jawaban lama
+                Question::where('id_ujian',$id_ujian)
+                            ->delete();
+                foreach($request->get('soal') as $soal){
+                    try{
+                         Question::create([
+                            'id_ujian' => $id_ujian,
+                            'pertanyaan' => $soal,
+                            'kunci_jawaban' => $request->get('jawaban')[$count]
+                        ]);
+                    }catch(QueryException $e){
+                        dd($e->errorInfo);
+                    }
+                    $count++;
+                }
+ 
+                return redirect('/edit_ujian/'.$id_ujian)->with('success',"Ujian berhasil diubah!");
+            }
+
+        }catch(QueryException $e){
+            dd($e->errorInfo);
+        }
+
     }
 
     /**
@@ -229,9 +335,16 @@ class PengajarController extends Controller
      * @param  \App\Teacher  $teacher
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Teacher $teacher)
+    public function destroy(Teacher $teacher,Request $request)
     {
-        //
+        try{
+            Exam::where('id_ujian',$request->id_ujian)
+                ->delete();
+        }catch(QueryException $e){
+            dd($e->errorInfo);
+        }
+
+        return redirect('/pengajar')->with('success','Berhasil dihapus.');
     }
 
     /**

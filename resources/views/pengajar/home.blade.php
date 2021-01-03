@@ -109,6 +109,16 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-body">
+                        @if (session('failed'))
+                            <div class="alert alert-danger">
+                                {{ session('failed') }}
+                            </div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         <div class="table-responsive">
                             <table class="table table-bordered" id="ujianTable" width="100%" cellspacing="0">
                                 <thead>
@@ -139,13 +149,6 @@
                                         @switch($u->status)
                                             @case(1)
                                                 <div class="badge badge-success">Ongoing</div>
-                                                <div class="badge badge-info">
-                                                    <a href="/edit_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-edit"></i></a>
-                                                </div>
-                                                <div class="badge badge-danger">
-                                                    <a href="/hapus_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-trash-alt"></i></a>
-                                                </div>
-                                                
                                                 @break
                                             @case(2)
                                                 <div class="badge badge-danger">Ended</div>
@@ -155,7 +158,31 @@
                                                 @break
                                         @endswitch
                                     </td>
-                                    <td>xx</td>
+                                    <td>
+                                        @switch($u->status)
+                                            @case(1)
+                                                <div class="badge badge-info">
+                                                    <a href="/hasil_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
+                                                </div>
+                                                @break
+                                            @case(2)
+                                                <div class="badge badge-info">
+                                                    <a href="/hasil_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
+                                                </div>
+                                                @break
+                                            @default
+                                                <div class="badge badge-info">
+                                                    <a href="/hasil_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
+                                                </div>
+                                                <div class="badge badge-info">
+                                                    <a href="/edit_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-edit"></i></a>
+                                                </div>
+                                                <div class="badge badge-danger">
+                                                    <a href="#" id="deleteBtn" class="deleteBtn text-white p-1"  data-id="{{$u->id_ujian}}" data-nama="{{$u->nama}}"><i class="fas fa-trash-alt"></i></a>
+                                                </div>
+                                                @break
+                                        @endswitch
+                                    </td>
                                   </tr>
                                 @endforeach
                             </table>
