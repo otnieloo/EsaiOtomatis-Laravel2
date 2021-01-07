@@ -22,7 +22,9 @@ class PengajarController extends Controller
     {
         $this->middleware(function ($request, $next) {
             
-            if($request->session()->get('role') != 1){
+            if($request->session()->get('role') == 2){
+                return redirect('/siswa');
+            }else if($request->session()->get('role') == null){
                 return redirect('/login')->with('failed_exist','Not authorized!');
             }
 
@@ -79,7 +81,6 @@ class PengajarController extends Controller
         }
 
         // Cek id yang diakses sesuai dengan id ujian
-
         
         $examInfo = Exam::where('id_pengajar',$pengajar[0]->id_pengajar)
                     ->where('id_ujian',$id)

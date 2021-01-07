@@ -24,8 +24,7 @@
                             <h5 class="my-3">Masukkan Kode Ujian</h5>
                             <form action="#" class="my-3">
                                 <div class="form-group">
-                                  <input type="text" class="form-control" name="kode_ujian" id="" aria-describedby="helpId" placeholder="">
-                                  {{-- <small id="helpId" class="form-text text-muted"></small> --}}
+                                  <input type="text" class="form-control" name="kode_ujian" id="kode_ujian" aria-describedby="helpId" placeholder="">
                                 </div>
                                 <div class="form-group my-4">
                                     <button class="btn btn-primary form-control" id="enrollSubmitButton">Submit</button>
@@ -64,36 +63,36 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Field</th>
-                        <th scope="col">Isi</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <table class="enrollTable">
+                    <tr>
+                        <th>Nama</th>
+                        <td id="enrollNama">asd</td>
+                        <th>Pengajar</th>
+                        <td id="enrollPengajar">asd</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td id="enrollStatus">asd</td>
+                        <th>Jumlah Soal</th>
+                        <td id="enrollJumlahSoal">1</td>
+                    </tr>
+                    <tr>
+                        <th>Jadwal</th>
+                        <td id="enrollJadwal">asd</td>
+                        <th>Jadwal Selesai</th>
+                        <td id="enrollJadwalSelesai">1</td>
+                    </tr>
+                    <tr>
+                        <th>Durasi</th>
+                        <td id="enrollDurasi">asd</td>
+                        <th>Tanggal Dibuat</th>
+                        <td id="enrollTanggalBuat">asd</td>
+                    </tr>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="enrollButton">Enroll</button>
+                <button type="button" class="btn btn-success" id="enrollButton" data-id="">Enroll</button>
             </div>
             </div>
         </div>

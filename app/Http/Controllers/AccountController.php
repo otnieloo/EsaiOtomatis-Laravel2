@@ -21,6 +21,16 @@ class AccountController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return void
+     */
+    public function home()
+    {
+        return view('front.login');
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

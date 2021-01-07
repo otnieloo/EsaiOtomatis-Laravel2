@@ -7,8 +7,6 @@
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            {{-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
         </div>
 
         <!-- Content Row -->
@@ -109,18 +107,90 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-body">
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="ujianTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama Ujian</th>
+                                        <th scope="col">Pengajar</th>
+                                        <th scope="col">Jumlah Soal</th>
+                                        <th scope="col">Kode Ujian</th>
+                                        <th scope="col">Jadwal</th>
+                                        <th scope="col">Jadwal Selesai</th>
+                                        <th scope="col">Durasi</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    @foreach($ujian AS $u)
+                                    @php
+                                        $u = $u[0];
+                                    @endphp
+                                <tr>
+                                    <th scope="row">{{$loop->iteration}}</th>
+                                    <td>{{$u->nama}}</td>
+                                    <td>{{$pengajar[$loop->iteration-1][0]->nama}}</td>
+                                    <td>{{$u->jumlah_soal}}</td>
+                                    <td>{{$u->kode_ujian}}</td>
+                                    <td>{{$u->jadwal}}</td>
+                                    <td>{{$u->jadwal_selesai}}</td>
+                                    <td>{{$u->durasi.' menit'}}</td>
+                                    <td>
+                                        @switch($u->status)
+                                            @case(1)
+                                                <div class="badge badge-success">Ongoing</div>
+                                                @break
+                                            @case(2)
+                                                <div class="badge badge-danger">Ended</div>
+                                                @break
+                                            @default
+                                                <div class="badge badge-warning">Pending</div>
+                                                @break
+                                        @endswitch
+                                    </td>
+                                    <td>
+                                        @switch($u->status)
+                                            @case(1)
+                                                <div class="badge badge-info">
+                                                    <a href="/hasil_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
+                                                </div>
+                                                <div class="badge badge-primary">
+                                                    <a href="/isi_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-pencil-alt"></i></a>
+                                                </div>
+                                                @break
+                                            @case(2)
+                                                <div class="badge badge-info">
+                                                    <a href="/lihat_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
+                                                </div>
+                                                <div class="badge badge-primary">
+                                                    <a href="/isi_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-pencil-alt"></i></a>
+                                                </div>
+
+                                                @break
+                                            @default
+                                                <div class="badge badge-info">
+                                                    <a href="/lihat_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
+                                                </div>
+           
+                                                @break
+                                        @endswitch
+                                    </td>
+                                  </tr>
+                                @endforeach
+                                </tbody>
                                 
                             </table>
                         </div>

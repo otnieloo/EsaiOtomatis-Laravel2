@@ -14,36 +14,54 @@
         <div class="row">
             <div class="container-fluid">
 
-
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-body">
-                        <h1 class="h3 mb-2 text-gray-800 text-center">Soal Ujian XXX</h1>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if ($status == 'late')
+                            <div class="alert alert-danger">
+                                You are late. Your submission status will be late.
+                            </div>
+                        @endif
+                        <h1 class="h3 mb-2 text-gray-800 text-center">Soal Ujian {{$ujian->nama}}</h1>
                         <hr>
                         <h5 class="text-right" id="timerCountdown"></h5>
-                        <table class="table">
-                            @for($i = 1; $i<=5;$i++)
-                                <tr>
-                                    <th>{{$i}}</th>
-                                    <th>Pertanyaan</th>
-                                    <th>Apa yang dimaksud XXX?</th>
-                                </tr>
+                        <form action="/isi_ujian" method="post">
+                            {{ csrf_field()}}
+                            <input type="hidden" name="id" value="{{$id_hash}}">
+                            <table class="table">
+                                @foreach($question as $q)
+                                    <tr>
+                                        <th>{{$loop->iteration}}</th>
+                                        <th>Pertanyaan</th>
+                                        <th>{{$q->pertanyaan}}</th>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <th>Jawaban</th>
+                                        <td>
+                                            <textarea name="jawaban[]" id="" cols="80" rows="5"></textarea>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 <tr>
                                     <td></td>
-                                    <th>Jawaban</th>
+                                    <td></td>
                                     <td>
-                                        <textarea name="jawaban[]" id="" cols="80" rows="5"></textarea>
+                                        <button class="btn btn-primary mx-auto w-25">Submit</button>
                                     </td>
                                 </tr>
-                            @endfor
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <button class="btn btn-primary mx-auto w-25">Submit</button>
-                                </td>
-                            </tr>
-                        </table>
+                            </table>
+                        </form>
+
                     </div>
                 </div>
 
@@ -51,5 +69,45 @@
             
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+            // Timer
+            // Set the date we're counting down to
+            var countDownDate = new Date('{{ $ujian->jadwal_selesai }}').getTime();
+
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+
+                // Get today's date and time
+                var now = new Date().getTime();
+
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
+
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result in the element with id="demo"
+                @if($status == 'late')
+                    document.getElementById("timerCountdown").innerText = "Sisa waktu: LATE";
+                @else
+                    document.getElementById("timerCountdown").innerText = "Sisa waktu: "+days + "hari " + hours + "jam "
+                    + minutes + "menit " + seconds + "detik ";                    
+                @endif
+                // document.getElementById("timerCountdown").innerText = "Sisa waktu: "+days + "hari " + hours + "jam "
+                // + minutes + "menit " + seconds + "detik ";
+
+                // If the count down is finished, write some text
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("demo").innerHTML = "EXPIRED";
+                }
+            }, 1000);
+
+        });
+    </script>
     <!-- /.container-fluid -->  
 @endsection

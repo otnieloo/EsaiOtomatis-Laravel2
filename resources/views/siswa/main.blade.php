@@ -8,23 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Siswa</title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
     
     {{-- Datetime picker --}}
-    <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+    {{-- Datatable --}}
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+
+    {{-- Select2 plugin --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
     {{-- Custom css --}}
-    <link rel="stylesheet" href="css/siswa.css">
+    <link rel="stylesheet" href="/css/siswa.css">
+
+
 
 </head>
 
@@ -201,9 +210,9 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $siswa[0]->nama }}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                    src="/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -212,14 +221,7 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                {{-- <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a> --}}
-                                {{-- <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a> --}}
+
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -273,31 +275,40 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-primary" type="button" id="logoutButton">Logout</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="/js/demo/chart-area-demo.js"></script>
+    <script src="/js/demo/chart-pie-demo.js"></script>
 
     {{-- Datetime picker --}}
-    <script src="js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/js/bootstrap-datetimepicker.min.js"></script>
+
+    {{-- Datatable --}}
+    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+    {{-- Sweet Aler2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    {{-- Select2 Plugin --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
     {{-- Custom JS --}}
     <script type="text/javascript">
@@ -315,45 +326,112 @@
             todayHighlight: true
         });
 
-        // Enroll
-        $('#enrollSubmitButton').click((e) => {
-            e.preventDefault();
-            $('#enrollModal').modal('show');
-        });
-
-        // Timer
-        function timer(){
-            // Set the date we're counting down to
-            var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
-
-            // Update the count down every 1 second
-            var x = setInterval(function() {
-
-                // Get today's date and time
-                var now = new Date().getTime();
-
-                // Find the distance between now and the count down date
-                var distance = countDownDate - now;
-
-                // Time calculations for days, hours, minutes and seconds
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                // Display the result in the element with id="demo"
-                document.getElementById("timerCountdown").innerText = "Sisa waktu: "+days + "hari " + hours + "jam "
-                + minutes + "menit " + seconds + "detik ";
-
-                // If the count down is finished, write some text
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("demo").innerHTML = "EXPIRED";
+        // For datatable
+        $(document).ready( function () {
+            $('#ujianTable').DataTable();
+        
+            // Enroll
+            $('#enrollSubmitButton').click((e) => {
+                e.preventDefault();
+                var kode_ujian = $('#kode_ujian').val();
+                // console.log(kode_ujian);
+                if(kode_ujian != ''){
+                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        url: '/cek_enroll',
+                        type: 'POST',
+                        data: {_token: CSRF_TOKEN, kode_ujian:kode_ujian},
+                        dataType: 'JSON',
+                        success: function (data) {
+                            $('#enrollNama').text(data.nama);
+                            var status;
+                            switch(data.status){
+                                case '0':
+                                    status = "<div class=\"badge badge-warning\">Pending</div>";
+                                    break;
+                                case '1':
+                                    status = "<div class=\"badge badge-success\">Ongoing</div>";
+                                    break;
+                                case '2':
+                                    status = "<div class=\"badge badge-danger\">Ended</div>";
+                                    break;
+                            }
+                            $('#enrollStatus').html(status);
+                            $('#enrollPengajar').text(data.nama);
+                            $('#enrollJumlahSoal').text(data.jumlah_soal);
+                            $('#enrollJadwal').text(data.jadwal);
+                            $('#enrollJadwalSelesai').text(data.jadwal_selesai);
+                            $('#enrollDurasi').text(data.durasi+' menit');
+                            $('#enrollTanggalDibuat').text(data.created_at);
+                            $('#enrollButton').attr('data-id',data.id_ujian);
+                            $('#enrollModal').modal('show');
+                        }
+                    });
                 }
-            }, 1000);
-        }
+            });
 
-        timer();
+            $('#enrollButton').click(()=>{
+                var id = $('#enrollButton').attr('data-id');
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                
+                $.ajax({
+                        url: '/enroll',
+                        type: 'POST',
+                        data: {_token: CSRF_TOKEN,id_ujian:id},
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if(data.status == 'failed'){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message,
+                                })
+                                $('#enrollModal').modal('hide');
+                                
+                            }else{
+                                Swal.fire({
+                                icon: 'success',
+                                title: 'Enroll Success',
+                                text: data.message,
+                                })
+                                $('#enrollModal').modal('hide');
+
+                            }
+                        }
+                    });
+            });
+
+            // Select2
+            $('#pilihUjian').select2();
+
+            // Pilih ujian
+            $('#pilihUjian').change(()=>{
+                var id = $('#pilihUjian').val();
+                window.location.replace('/lihat_ujian/'+id);
+            });
+
+            // AJAX
+            // Logout
+            $("#logoutButton").click(function(){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    /* the route pointing to the post function */
+                    url: '/logout',
+                    type: 'POST',
+                    /* send the csrf-token and the input to the controller */
+                    data: {_token: CSRF_TOKEN, message:'logout'},
+                    dataType: 'JSON',
+                    /* remind that 'data' is the response of the AjaxController */
+                    success: function (data) { 
+                        console.log(data.msg);
+                        window.location.replace("/login");
+                    }
+                }); 
+            });
+
+        } );
+
+        
     </script>
 
 </body>

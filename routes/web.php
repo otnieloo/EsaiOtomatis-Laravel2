@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('front/home');
-});
+Route::get('/', 'AccountController@home');
 
 Route::get('/login', 'AccountController@index');
 
@@ -51,21 +49,21 @@ Route::get('/cek_jawaban', function () {
 });
 
 // Siswa
-Route::get('/siswa', function () {
-    return view('siswa/home');
-});
+Route::get('/siswa', 'SiswaController@index');
 
-Route::get('/enroll', function () {
-    return view('siswa/enroll_ujian');
-});
+Route::get('/enroll', 'SiswaController@enroll');
 
-Route::get('/lihat_ujian', function () {
-    return view('siswa/lihat_ujian');
-});
+Route::post('/enroll', 'SiswaController@enrollUjian');
 
-Route::get('/isi_soal', function () {
-    return view('siswa/isi_soal');
-});
+Route::post('/cek_enroll', 'SiswaController@cekEnroll');
+
+Route::get('/isi_ujian/{id}', 'SiswaController@isiUjian');
+
+Route::post('/isi_ujian', 'SiswaController@submitIsiUjian');
+
+Route::get('/lihat_ujian/{id}', 'SiswaController@lihatUjian');
+Route::get('/lihat_ujian', 'SiswaController@lihatUjian');
+
 
 Route::get('/sb', function () {
     return view('sb_index');
