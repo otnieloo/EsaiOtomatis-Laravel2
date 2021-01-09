@@ -8,10 +8,14 @@ use App\Enroll;
 use App\Exam;
 use App\Question;
 use App\Answer;
+use App\Similarity;
+use App\Score;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 
 class SiswaController extends Controller
 {
@@ -104,15 +108,19 @@ class SiswaController extends Controller
         }
 
         try{
-            $question = Question::where('id_ujian',$id)
+            $question = Question::where('questions.id_ujian',$id)
                 ->leftJoin('answers','questions.id_soal','=','answers.id_soal')
+                ->leftJoin('similarities','similarities.id_jawaban','=','answers.id_jawaban')
                 ->where('answers.id_siswa',$this->siswa[0]->id_siswa)
                 ->get();
+            $total_nilai = Score::where('id_ujian',$id)
+                                ->where('id_siswa',$this->siswa[0]->id_siswa)
+                                ->first();
         }catch(QueryException $e){
             dd($e->errorInfo);
         }
 
-        return view('siswa.lihat_ujian',compact('siswa','exam','examInfo','question'));
+        return view('siswa.lihat_ujian',compact('siswa','exam','examInfo','question','total_nilai'));
     }
 
     /**
@@ -175,10 +183,13 @@ class SiswaController extends Controller
         $ujian = Exam::where('kode_ujian',$request->kode_ujian)
             ->leftJoin('teachers','exams.id_pengajar','=','teachers.id_pengajar')
             ->first();
-        if(isset($ujian)){
+        if(!is_null($ujian)){
             echo json_encode($ujian);
         }else{
-            echo 'failed';
+            echo json_encode([
+                'status' => 'failed',
+                'message' => 'Ujian not found.'
+            ]);
         }
     }
 
@@ -191,8 +202,10 @@ class SiswaController extends Controller
     public function enrollUjian(Request $request)
     {
         // Cek apakah sudah enroll
-        $enroll = Enroll::where('id_siswa',$this->siswa[0]->id_siswa)->first();
-        if(isset($enroll) && $enroll->id_ujian == $request->id_ujian){
+        $enroll = Enroll::where('id_siswa',$this->siswa[0]->id_siswa)
+                    ->where('id_ujian',$request->id_ujian)
+                    ->first();
+        if(!is_null($enroll)){
             echo json_encode([
                 'status' => 'failed',
                 'message' => 'You are already enrolled.'
@@ -259,20 +272,56 @@ class SiswaController extends Controller
 
         if(isset($ujian)){
             $count = 0;
+            $total_nilai = array();
+            $total_nilaiqe = array();
             foreach($request->jawaban as $j){
                 try{
+                    $id_soal = $question[$count]->id_soal;
                     $data = [
-                        'id_soal' => $question[$count]->id_soal,
+                        'id_soal' => $id_soal,
                         'id_siswa' => $this->siswa[0]->id_siswa,
+                        'id_ujian' => $ujian->id_ujian,
                         'jawaban' => $j
                     ];
                     Answer::create($data);
+
+                    // Submit similaritas
+                    $similaritas = $this->cekSimilaritas($id_soal,$j);
+                    $jawaban = Answer::where('id_soal',$id_soal)
+                                    ->where('id_siswa',$this->siswa[0]->id_siswa)
+                                    ->first();
+                    if(isset($similaritas)){
+                        $data = [
+                            'id_jawaban'          => $jawaban->id_jawaban,
+                            'id_soal'          => $id_soal,
+                            'nilai_similaritas'   => $similaritas->cosine1,
+                            'nilai_similaritasqe' => $similaritas->cosine2,
+                            'nilai_sistem'        => $similaritas->cosine2
+                        ];
+                        Similarity::create($data);
+                        $total_nilai[] = $similaritas->cosine1;
+                        $total_nilaiqe[] = $similaritas->cosine2;
+                    }else{
+                        dd('API Offline');
+                    }
                     $count++;
                 }catch(QueryException $e){
                     dd($e->errorInfo);
                 }            
             }
 
+            // Hitung total nilai
+            try{
+                $data = [
+                    'id_ujian' => Crypt::decryptString($request->id),
+                    'id_siswa' => $this->siswa[0]->id_siswa,
+                    'total_nilai' => array_sum($total_nilai)/count($request->jawaban),
+                    'total_nilaiqe' => array_sum($total_nilaiqe)/count($request->jawaban)
+                ];
+                Score::create($data);
+            }catch(QueryException $e){
+                dd($e->errorInfo);
+            }
             return redirect('/siswa')->with('success','Berhasil. Semoga mendapatkan hasil yang terbaik.');
         }else{
             echo 'not found ';
@@ -345,4 +394,38 @@ class SiswaController extends Controller
     {
         //
     }
+
+    /**
+     * Consume API.
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function cekSimilaritas($id_soal,$jawaban)
+    {
+        try{
+            $question = Question::where('id_soal',$id_soal)->first();
+        }catch(QueryException $e){
+            $e->errorInfo;
+        }
+
+        $client = new Client();
+        $url = 'http://localhost:5000/';
+        
+        $data = [
+            'form_params'=>[
+                'kalimat1' => $question->kunci_jawaban,
+                'kalimat2' => $jawaban
+            ]
+        ];
+
+        $response = $client->post($url,$data);
+        
+        $result = $response->getBody()->getContents();
+       
+        return json_decode($result);
+
+    }
+
+
 }

@@ -165,7 +165,7 @@
                                         @switch($u->status)
                                             @case(1)
                                                 <div class="badge badge-info">
-                                                    <a href="/hasil_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
+                                                    <a href="/lihat_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-eye"></i></a>
                                                 </div>
                                                 <div class="badge badge-primary">
                                                     <a href="/isi_ujian/{{$u->id_ujian}}" class="text-white p-1"><i class="fas fa-pencil-alt"></i></a>

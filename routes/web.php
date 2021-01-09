@@ -64,6 +64,8 @@ Route::post('/isi_ujian', 'SiswaController@submitIsiUjian');
 Route::get('/lihat_ujian/{id}', 'SiswaController@lihatUjian');
 Route::get('/lihat_ujian', 'SiswaController@lihatUjian');
 
+Route::get('/api', 'SiswaController@consumeApi');
+
 
 Route::get('/sb', function () {
     return view('sb_index');

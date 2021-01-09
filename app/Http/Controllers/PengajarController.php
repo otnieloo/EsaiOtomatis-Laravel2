@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Teacher;
 use App\Exam;
 use App\Question;
+use App\Enroll;
+use App\Answer;
+use App\Score;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use DateTime;
@@ -74,6 +77,7 @@ class PengajarController extends Controller
     public function hasilUjian($id = null)
     {
         $pengajar = $this->pengajar;
+        $question = Question::where('id_ujian',$id)->get();
         $exam = Exam::where('id_pengajar',$pengajar[0]->id_pengajar)->get();
         
         if(is_null($id)){
@@ -86,17 +90,31 @@ class PengajarController extends Controller
                     ->where('id_ujian',$id)
                     ->get();
         
-        if(!isset($examInfo[0])){
+                    if(!isset($examInfo[0])){
             return redirect('/hasil_ujian');
         }
 
         try{
-            $question = Question::where('id_ujian',$id)->get();
+            $enroll = Enroll::where('enrolls.id_ujian',$id)
+                ->join('students','enrolls.id_siswa','=','students.id_siswa')
+                ->select('*','enrolls.created_at AS date_enrolled')
+                ->get();
+
+                foreach($enroll as $e){
+                    $answer[] = Answer::where('id_siswa',$e->id_siswa)
+                        ->leftJoin('similarities','answers.id_jawaban','=','similarities.id_jawaban')
+                        ->where('id_ujian',$id)
+                        ->get();
+                    $score[] = Score::where('id_siswa',$e->id_siswa)
+                        ->where('id_ujian',$id)
+                        ->first();
+            }
+                
         }catch(QueryException $e){
             dd($e->errorInfo);
         }
 
-        return view('pengajar.hasil_ujian',compact('pengajar','exam','examInfo','question'));
+        return view('pengajar.hasil_ujian',compact('pengajar','exam','examInfo','question','enroll','answer','score'));
     }
 
     /**

@@ -329,6 +329,7 @@
         // For datatable
         $(document).ready( function () {
             $('#ujianTable').DataTable();
+            $('#dataTable').DataTable();
         
             // Enroll
             $('#enrollSubmitButton').click((e) => {
@@ -343,28 +344,36 @@
                         data: {_token: CSRF_TOKEN, kode_ujian:kode_ujian},
                         dataType: 'JSON',
                         success: function (data) {
-                            $('#enrollNama').text(data.nama);
-                            var status;
-                            switch(data.status){
-                                case '0':
-                                    status = "<div class=\"badge badge-warning\">Pending</div>";
-                                    break;
-                                case '1':
-                                    status = "<div class=\"badge badge-success\">Ongoing</div>";
-                                    break;
-                                case '2':
-                                    status = "<div class=\"badge badge-danger\">Ended</div>";
-                                    break;
+                            if(data.status == 'failed'){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message,
+                                })
+                            }else{
+                                $('#enrollNama').text(data.nama);
+                                var status;
+                                switch(data.status){
+                                    case '0':
+                                        status = "<div class=\"badge badge-warning\">Pending</div>";
+                                        break;
+                                    case '1':
+                                        status = "<div class=\"badge badge-success\">Ongoing</div>";
+                                        break;
+                                    case '2':
+                                        status = "<div class=\"badge badge-danger\">Ended</div>";
+                                        break;
+                                }
+                                $('#enrollStatus').html(status);
+                                $('#enrollPengajar').text(data.nama);
+                                $('#enrollJumlahSoal').text(data.jumlah_soal);
+                                $('#enrollJadwal').text(data.jadwal);
+                                $('#enrollJadwalSelesai').text(data.jadwal_selesai);
+                                $('#enrollDurasi').text(data.durasi+' menit');
+                                $('#enrollTanggalDibuat').text(data.created_at);
+                                $('#enrollButton').attr('data-id',data.id_ujian);
+                                $('#enrollModal').modal('show');
                             }
-                            $('#enrollStatus').html(status);
-                            $('#enrollPengajar').text(data.nama);
-                            $('#enrollJumlahSoal').text(data.jumlah_soal);
-                            $('#enrollJadwal').text(data.jadwal);
-                            $('#enrollJadwalSelesai').text(data.jadwal_selesai);
-                            $('#enrollDurasi').text(data.durasi+' menit');
-                            $('#enrollTanggalDibuat').text(data.created_at);
-                            $('#enrollButton').attr('data-id',data.id_ujian);
-                            $('#enrollModal').modal('show');
                         }
                     });
                 }

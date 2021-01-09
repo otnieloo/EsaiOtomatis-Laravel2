@@ -51,7 +51,7 @@
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                               <a class="nav-item nav-link active" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab" aria-controls="nav-data" aria-selected="true">Data</a>
-                              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
+                              <a class="nav-item nav-link" id="nav-nilai-tab" data-toggle="tab" href="#nav-nilai" role="tab" aria-controls="nav-nilai" aria-selected="false">Nilai</a>
                               <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
                             </div>
                         </nav>
@@ -102,6 +102,9 @@
                                                         <th>No</th>
                                                         <th>Soal</th>
                                                         <th>Jawaban</th>
+                                                        <th>Cosine Sim</th>
+                                                        <th>Cosine Sim + QE</th>
+                                                        <th>Nilai Sistem</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -110,8 +113,19 @@
                                                             <td>{{$loop->iteration}}</td>
                                                             <td>{{$q->pertanyaan}}</td>
                                                             <td>{{$q->jawaban}}</td>
+                                                            <td>{{$q->nilai_similaritas}}</td>
+                                                            <td>{{$q->nilai_similaritasqe}}</td>
+                                                            <td>{{$q->nilai_sistem}}</td>
                                                         </tr>
                                                     @endforeach
+                                                    @if(isset($total_nilai))
+                                                        <tr>
+                                                            <td colspan="3">TOTAL</td>
+                                                            <td>{{$total_nilai->total_nilai*100}}</td>
+                                                            <td>{{$total_nilai->total_nilaiqe*100}}</td>
+                                                            <td>{{$total_nilai->total_nilaiqe*100}}</td>
+                                                        </tr>
+                                                    @endif
                                                 </tbody>
                                                 
                                             </table>
@@ -123,7 +137,25 @@
                                 @endif
 
                             </div>
-                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+                            <div class="tab-pane fade" id="nav-nilai" role="tabpanel" aria-labelledby="nav-nilai-tab">
+                                <h3 class="text-center my-3">Nilai Ujian</h3>
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Soal</th>
+                                            <th>Jawaban</th>
+                                            <th>Cosine Sim</th>
+                                            <th>Cosine Sim + QE</th>
+                                            <th>Nilai Sistem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
                             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
                         </div>  
                           

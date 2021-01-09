@@ -434,6 +434,9 @@
             // For datatable
             $(document).ready( function () {
                 $('#ujianTable').DataTable();
+                $('#dataTable').DataTable();
+                $('#dataTable2').DataTable();
+                $('#dataTable3').DataTable();
             } );
 
             // Remove button
@@ -539,9 +542,7 @@
                     }
                 }); 
             });
-            setInterval(()=>{
-                console.log(new Date);
-            },1000)
+
         });
 
 
