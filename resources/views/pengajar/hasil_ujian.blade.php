@@ -173,8 +173,8 @@
                                     <div class="table-responsive mt-2" id="hasilUjianTable">
                                         <table class="infoTable">
                                             <tr>
-                                                <th>Jumlah siswa enrolled</th>
-                                                <td>{{count($enroll)}} siswa</td>
+                                                <th>Jumlah siswa submitted</th>
+                                                <td>{{count($answer)}} siswa</td>
                                             </tr>
                                         </table>
                                         <table class="table table-bordered display nowrap" id="dataTable4" width="100%" cellspacing="0">
@@ -253,6 +253,8 @@
                         '<th>Cosine Sim</th>'+
                         '<th>Cosine Sim+QE</th>'+
                         '<th>Nilai Sistem</th>'+
+                        '<th>Total Konversi</th>'+
+                        '<th>Total Konversi QE</th>'+
                     '</tr>';
                 var count = 1;
                 
@@ -263,6 +265,8 @@
                         '<td>'+d3[x]['nilai_similaritas']+'</td>'+
                         '<td>'+d3[x]['nilai_similaritasqe']+'</td>'+
                         '<td>'+d3[x]['nilai_sistem']+'</td>'+
+                        '<td>'+d3[x]['nilai_konversi']+'</td>'+
+                        '<td>'+d3[x]['nilai_konversiqe']+'</td>'+
                         '</tr>';
                     count++;
                 }
@@ -272,9 +276,13 @@
             }
             var table = $('#dataTable3').DataTable({});
             var table = $('#dataTable4').DataTable({});
+            $(document).on('click',function(e){
+                console.log(e.target);
+            });
 
             // Add event listener for opening and closing details
-            $('td.details-control').on('click', function () {
+            $('#dataTable4').on('click','td.details-control', function () {
+                console.log('Clicked');
                 var tr = $(this).closest('tr');
                 var row = table.row( tr );
         
