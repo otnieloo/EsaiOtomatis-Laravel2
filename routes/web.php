@@ -39,6 +39,7 @@ Route::delete('/hapus_ujian', 'PengajarController@destroy');
 
 Route::get('/hasil_ujian/{id}', 'PengajarController@hasilUjian');
 Route::get('/hasil_ujian', 'PengajarController@hasilUjian');
+Route::get('/export/{id}', 'PengajarController@export');
 
 Route::get('/cek_ujian', function () {
     return view('pengajar/cek_ujian');

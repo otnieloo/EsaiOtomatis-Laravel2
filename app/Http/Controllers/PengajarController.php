@@ -8,6 +8,8 @@ use App\Question;
 use App\Enroll;
 use App\Answer;
 use App\Score;
+use App\Exports\SimilarityExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use DateTime;
@@ -382,6 +384,18 @@ class PengajarController extends Controller
             return true;
         }
     }
+
+    /**
+     * Export nilai ujian
+     * 
+     * @return void
+     */
+    public function export($id_ujian)
+    {
+        return Excel::download(new SimilarityExport($id_ujian), 'similarity.xlsx');
+    }
+
+
 
     
 }

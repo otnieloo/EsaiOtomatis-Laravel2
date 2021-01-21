@@ -100,6 +100,8 @@
                                             <tr>
                                                 <th>Kode Ujian</th>
                                                 <td>{{$examInfo[0]->kode_ujian}}</td>
+                                                <th>Export</th>
+                                                <th><a href="/export/{{$examInfo[0]->id_ujian}}"><i class="far fa-file-excel fa-2x" style="color:#2ab12e;"></i></a></th>
                                             </tr>
                                         </table>
                                         @if(isset($question))
