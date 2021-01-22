@@ -66,6 +66,7 @@ Route::get('/lihat_ujian/{id}', 'SiswaController@lihatUjian');
 Route::get('/lihat_ujian', 'SiswaController@lihatUjian');
 
 Route::get('/api', 'SiswaController@consumeApi');
+Route::get('/add_answer', 'SiswaController@addAnswers');
 
 
 Route::get('/sb', function () {

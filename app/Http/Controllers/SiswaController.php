@@ -16,6 +16,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\AnswersImport;
 
 class SiswaController extends Controller
 {
@@ -425,6 +427,11 @@ class SiswaController extends Controller
        
         return json_decode($result);
 
+    }
+
+    public function addAnswers()
+    {
+        Excel::import(new AnswersImport('29'), 'abc3.csv');
     }
 
 
