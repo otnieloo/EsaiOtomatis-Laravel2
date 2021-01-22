@@ -171,67 +171,69 @@
                             </div>
                             {{-- Nilai --}}
                             <div class="tab-pane fade" id="nav-nilai" role="tabpanel" aria-labelledby="nav-nilai-tab">
-                                @if(count($enroll)!=0)
-                                
-                                    <div class="table-responsive mt-2" id="hasilUjianTable">
-                                        <table class="infoTable">
-                                            <tr>
-                                                <th>Jumlah siswa submitted</th>
-                                                <td>{{count($answer)}} siswa</td>
-                                            </tr>
-                                        </table>
-                                        <table class="table table-bordered display nowrap" id="dataTable4" width="100%" cellspacing="0">
-                                            <thead>
+                                @if(isset($enroll))
+                                    @if(count($enroll)!=0)
+                                    
+                                        <div class="table-responsive mt-2" id="hasilUjianTable">
+                                            <table class="infoTable">
                                                 <tr>
-                                                    <th></th>
-                                                    <th>No</th>
-                                                    <th>Nama</th>
-                                                    <th>Email</th>
-                                                    <th>Status</th>
-                                                    <th>Waktu Submit</th>
-                                                    <th>Total Nilai</th>
-                                                    <th>Total NilaiQE</th>
-
+                                                    <th>Jumlah siswa submitted</th>
+                                                    <td>{{count($answer)}} siswa</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($enroll as $e)
-                                                    @if (isset($answer[$loop->iteration-1][0]))
-                                                        <tr data-child-value="{{$e}}" data-child-value2="{{$loop->iteration}}" data-child-value3="{{$answer[$loop->iteration-1]}}">
-                                                            <td class="details-control"></td>
-                                                            <td>{{$loop->iteration}}</td>
-                                                            <td>{{$e->nama}}</td>
-                                                            <td>{{$e->email}}</td>
-                                                            <td>
-                                                                @if($examInfo[0]->jadwal_selesai >= $answer[$loop->iteration-1][0]->created_at)
-                                                                    <div class="badge badge-success">
-                                                                        On time
-                                                                    </div>
-                                                                @else
-                                                                <div class="badge badge-danger">
-                                                                    Late
-                                                                    @php 
-                                                                        $origin = new DateTime($answer[$loop->iteration-1][0]->created_at);
-                                                                        $target = new DateTime($examInfo[0]->jadwal_selesai);
-                                                                        $interval = $origin->diff($target);
-                                                                        echo $interval->format('%R%i minutes');
-                                                                    @endphp
-                                                                </div>
-                                                                @endif
-                                                            </td>
-                                                            <td>{{$answer[$loop->iteration-1][0]->created_at}}</td>
-                                                            <td>{{$score[$loop->iteration-1]->total_nilai}}</td>
-                                                            <td>{{$score[$loop->iteration-1]->total_nilaiqe}}</td>
-                                                        </tr>
-                                                    @endif
-                                                @endforeach
-                                            </tbody>
-                                            
-                                        </table>
+                                            </table>
+                                            <table class="table table-bordered display nowrap" id="dataTable4" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>No</th>
+                                                        <th>Nama</th>
+                                                        <th>Email</th>
+                                                        <th>Status</th>
+                                                        <th>Waktu Submit</th>
+                                                        <th>Total Nilai</th>
+                                                        <th>Total NilaiQE</th>
 
-                                    </div>
-                                @else
-                                    <p>No data.</p>                                    
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($enroll as $e)
+                                                        @if (isset($answer[$loop->iteration-1][0]))
+                                                            <tr data-child-value="{{$e}}" data-child-value2="{{$loop->iteration}}" data-child-value3="{{$answer[$loop->iteration-1]}}">
+                                                                <td class="details-control"></td>
+                                                                <td>{{$loop->iteration}}</td>
+                                                                <td>{{$e->nama}}</td>
+                                                                <td>{{$e->email}}</td>
+                                                                <td>
+                                                                    @if($examInfo[0]->jadwal_selesai >= $answer[$loop->iteration-1][0]->created_at)
+                                                                        <div class="badge badge-success">
+                                                                            On time
+                                                                        </div>
+                                                                    @else
+                                                                    <div class="badge badge-danger">
+                                                                        Late
+                                                                        @php 
+                                                                            $origin = new DateTime($answer[$loop->iteration-1][0]->created_at);
+                                                                            $target = new DateTime($examInfo[0]->jadwal_selesai);
+                                                                            $interval = $origin->diff($target);
+                                                                            echo $interval->format('%R%i minutes');
+                                                                        @endphp
+                                                                    </div>
+                                                                    @endif
+                                                                </td>
+                                                                <td>{{$answer[$loop->iteration-1][0]->created_at}}</td>
+                                                                <td>{{$score[$loop->iteration-1]->total_nilai}}</td>
+                                                                <td>{{$score[$loop->iteration-1]->total_nilaiqe}}</td>
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                                
+                                            </table>
+
+                                        </div>
+                                    @else
+                                        <p>No data.</p>                                    
+                                    @endif
                                 @endif
                             </div>
                         </div>  
