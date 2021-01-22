@@ -171,7 +171,8 @@
                             </div>
                             {{-- Nilai --}}
                             <div class="tab-pane fade" id="nav-nilai" role="tabpanel" aria-labelledby="nav-nilai-tab">
-                                @if(!empty($enroll))
+                                @if(count($enroll)!=0)
+                                
                                     <div class="table-responsive mt-2" id="hasilUjianTable">
                                         <table class="infoTable">
                                             <tr>
