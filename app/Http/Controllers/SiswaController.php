@@ -293,12 +293,35 @@ class SiswaController extends Controller
                                     ->where('id_siswa',$this->siswa[0]->id_siswa)
                                     ->first();
                     if(isset($similaritas)){
+                        
+                        if($similaritas->cosine1 >= 0.7){
+                            $nilai_konversi = 2;
+                        }else if($similaritas->cosine1 >= 0.4){
+                            $nilai_konversi = 1;
+                        }else if($similaritas->cosine1 >= 0.1){
+                            $nilai_konversi = 0.5;
+                        }else{
+                            $nilai_konversi = 0;
+                        }
+
+                        if($similaritas->cosine2 >= 0.7){
+                            $nilai_konversiqe = 2;
+                        }else if($similaritas->cosine2 >= 0.4){
+                            $nilai_konversiqe = 1;
+                        }else if($similaritas->cosine2 >= 0.1){
+                            $nilai_konversiqe = 0.5;
+                        }else{
+                            $nilai_konversiqe = 0;
+                        }
+                        
                         $data = [
                             'id_jawaban'          => $jawaban->id_jawaban,
                             'id_soal'          => $id_soal,
                             'nilai_similaritas'   => $similaritas->cosine1,
                             'nilai_similaritasqe' => $similaritas->cosine2,
-                            'nilai_sistem'        => $similaritas->cosine2
+                            'nilai_sistem'        => $similaritas->cosine2,
+                            'total_konversi'        => $nilai_konversi,
+                            'total_konversiqe'        => $nilai_konversiqe
                         ];
                         Similarity::create($data);
                         $total_nilai[] = $similaritas->cosine1;
