@@ -16,11 +16,13 @@ use GuzzleHttp\Client;
 class AnswersImport implements ToCollection
 {
     protected $id_ujian;
+    protected $id_siswa;
     
-    public function __construct($id_ujian)
+    public function __construct($id_ujian,$id_siswa)
     {
         $this->id_ujian = $id_ujian;
-        ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+        $this->id_siswa = $id_siswa;
+        // ini_set('max_execution_time', 900); //300 seconds = 5 minutes
     }
     
     /**
@@ -30,7 +32,7 @@ class AnswersImport implements ToCollection
     public function collection(Collection $collection)
     {
         //
-        $id_siswa = 5;
+        $id_siswa = $this->id_siswa;
         $count = 1;
         $jawaban_siswa = array();
         $total_waktu = 0;

@@ -454,7 +454,7 @@ class SiswaController extends Controller
 
     public function addAnswers()
     {
-        Excel::import(new AnswersImport('2'), 'abc3.csv');
+        Excel::import(new AnswersImport('2','2'), 'abc3.csv');
     }
 
 
