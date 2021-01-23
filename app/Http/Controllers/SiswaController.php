@@ -320,8 +320,8 @@ class SiswaController extends Controller
                             'nilai_similaritas'   => $similaritas->cosine1,
                             'nilai_similaritasqe' => $similaritas->cosine2,
                             'nilai_sistem'        => $similaritas->cosine2,
-                            'total_konversi'        => $nilai_konversi,
-                            'total_konversiqe'        => $nilai_konversiqe
+                            'nilai_konversi'        => $nilai_konversi,
+                            'nilai_konversiqe'        => $nilai_konversiqe
                         ];
                         Similarity::create($data);
                         $total_nilai[] = $similaritas->cosine1;

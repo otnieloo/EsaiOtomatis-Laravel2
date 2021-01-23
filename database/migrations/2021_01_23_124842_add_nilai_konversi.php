@@ -15,8 +15,8 @@ class AddNilaiKonversi extends Migration
     {
         Schema::table('similarities', function (Blueprint $table) {
             //
-            $table->double('total_konversi',8,2);
-            $table->double('total_konversiqe',8,2);
+            $table->double('nilai_konversi',8,2);
+            $table->double('nilai_konversiqe',8,2);
         });
     }
 
@@ -29,8 +29,8 @@ class AddNilaiKonversi extends Migration
     {
         Schema::table('similarities', function (Blueprint $table) {
             //
-            $table->drop('total_konversi');
-            $table->drop('total_konversiqe');
+            $table->drop('nilai_konversi');
+            $table->drop('nilai_konversiqe');
         });
     }
 }

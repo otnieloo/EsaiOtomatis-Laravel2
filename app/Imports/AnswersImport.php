@@ -102,8 +102,8 @@ class AnswersImport implements ToCollection
                                 'nilai_similaritas'   => $similaritas->cosine1,
                                 'nilai_similaritasqe' => $similaritas->cosine2,
                                 'nilai_sistem'        => $similaritas->cosine2,
-                                'total_konversi'        => $nilai_konversi,
-                                'total_konversiqe'        => $nilai_konversiqe
+                                'nilai_konversi'        => $nilai_konversi,
+                                'nilai_konversiqe'        => $nilai_konversiqe
                             ];
                             $sim = Similarity::create($data);
                             if($sim){
