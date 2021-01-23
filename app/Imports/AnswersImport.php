@@ -149,7 +149,7 @@ class AnswersImport implements ToCollection
             $time = $time_end - $time_start;
             $total_waktu+= $time;
             echo "Process Time: {$time}<br>";
-            if($id_siswa > 44){
+            if($id_siswa > 41){
                 break;
             }
             // if($count > 1){
