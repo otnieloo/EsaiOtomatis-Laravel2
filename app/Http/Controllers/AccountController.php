@@ -17,7 +17,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        return view('front.home');
+        return view('front.login');
     }
 
     /**
@@ -27,7 +27,7 @@ class AccountController extends Controller
      */
     public function home()
     {
-        return view('front.login');
+        return view('front.home');
     }
 
     /**
