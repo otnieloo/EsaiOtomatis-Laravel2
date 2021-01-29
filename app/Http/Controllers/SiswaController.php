@@ -276,6 +276,8 @@ class SiswaController extends Controller
             $count = 0;
             $total_nilai = array();
             $total_nilaiqe = array();
+            $total_nilai_konversi = array();
+            $total_nilai_konversiqe = array();
             foreach($request->jawaban as $j){
                 try{
                     $id_soal = $question[$count]->id_soal;
@@ -326,6 +328,8 @@ class SiswaController extends Controller
                         Similarity::create($data);
                         $total_nilai[] = $similaritas->cosine1;
                         $total_nilaiqe[] = $similaritas->cosine2;
+                        $total_nilai_konversi[] = $nilai_konversi;
+                        $total_nilai_konversiqe[] = $nilai_konversiqe;
                     }else{
                         dd('API Offline');
                     }
@@ -341,7 +345,9 @@ class SiswaController extends Controller
                     'id_ujian' => Crypt::decryptString($request->id),
                     'id_siswa' => $this->siswa[0]->id_siswa,
                     'total_nilai' => array_sum($total_nilai)/count($request->jawaban),
-                    'total_nilaiqe' => array_sum($total_nilaiqe)/count($request->jawaban)
+                    'total_nilaiqe' => array_sum($total_nilaiqe)/count($request->jawaban),
+                    'total_nilai_konversi' => array_sum($total_nilai_konversi)/count($request->jawaban)*5,
+                    'total_nilai_konversiqe' => array_sum($total_nilai_konversiqe)/count($request->jawaban)*5,
                 ];
                 Score::create($data);
             }catch(QueryException $e){
@@ -454,7 +460,7 @@ class SiswaController extends Controller
 
     public function addAnswers()
     {
-        Excel::import(new AnswersImport('2','1'), 'def.xlsx');
+        Excel::import(new AnswersImport('32','5'), 'def.xlsx');
     }
 
 

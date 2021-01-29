@@ -22,7 +22,7 @@ class AnswersImport implements ToCollection
     {
         $this->id_ujian = $id_ujian;
         $this->id_siswa = $id_siswa;
-        // ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+        ini_set('max_execution_time', 900); //300 seconds = 5 minutes
     }
     
     /**
@@ -56,6 +56,8 @@ class AnswersImport implements ToCollection
                 $count = 0;
                 $total_nilai = array();
                 $total_nilaiqe = array();
+                $total_nilai_konversi = array();
+                $total_nilai_konversiqe = array();
                 foreach($jawaban_siswa as $j){
                     try{
                         $id_soal = $question[$count]->id_soal;
@@ -111,6 +113,8 @@ class AnswersImport implements ToCollection
                             }
                             $total_nilai[] = $similaritas->cosine1;
                             $total_nilaiqe[] = $similaritas->cosine2;
+                            $total_nilai_konversi[] = $nilai_konversi;
+                            $total_nilai_konversiqe[] = $nilai_konversiqe;
                         }else{
                             dd('API Offline');
                         }
@@ -126,7 +130,9 @@ class AnswersImport implements ToCollection
                         'id_ujian' => $this->id_ujian,
                         'id_siswa' => $id_siswa,
                         'total_nilai' => array_sum($total_nilai)/$jumlah_soal,
-                        'total_nilaiqe' => array_sum($total_nilaiqe)/$jumlah_soal
+                        'total_nilaiqe' => array_sum($total_nilaiqe)/$jumlah_soal,
+                        'total_nilai_konversi' => array_sum($total_nilai_konversi)/$jumlah_soal*5,
+                        'total_nilai_konversiqe' => array_sum($total_nilai_konversiqe)/$jumlah_soal*5,
                     ];
                     $sco = Score::create($data);
                     if($sco){
@@ -149,9 +155,10 @@ class AnswersImport implements ToCollection
             $time = $time_end - $time_start;
             $total_waktu+= $time;
             echo "Process Time: {$time}<br>";
-            if($id_siswa > 40){
+            if($id_siswa > 44){
                 break;
             }
+            
             // if($count > 1){
             //     break;
             // }

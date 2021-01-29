@@ -192,6 +192,8 @@
                                                         <th>Waktu Submit</th>
                                                         <th>Total Nilai</th>
                                                         <th>Total NilaiQE</th>
+                                                        <th>Total Nilai Konversi</th>
+                                                        <th>Total Nilai Konversi QE</th>
 
                                                     </tr>
                                                 </thead>
@@ -223,6 +225,8 @@
                                                                 <td>{{$answer[$loop->iteration-1][0]->created_at}}</td>
                                                                 <td>{{$score[$loop->iteration-1]->total_nilai}}</td>
                                                                 <td>{{$score[$loop->iteration-1]->total_nilaiqe}}</td>
+                                                                <td>{{$score[$loop->iteration-1]->total_nilai_konversi}}</td>
+                                                                <td>{{$score[$loop->iteration-1]->total_nilai_konversiqe}}</td>
                                                             </tr>
                                                         @endif
                                                     @endforeach
