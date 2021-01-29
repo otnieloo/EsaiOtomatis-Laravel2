@@ -22,7 +22,7 @@ class AnswersImport implements ToCollection
     {
         $this->id_ujian = $id_ujian;
         $this->id_siswa = $id_siswa;
-        ini_set('max_execution_time', 900); //300 seconds = 5 minutes
+        // ini_set('max_execution_time', 900); //300 seconds = 5 minutes
     }
     
     /**
