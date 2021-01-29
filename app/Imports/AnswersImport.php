@@ -163,9 +163,9 @@ class AnswersImport implements ToCollection
                 break;
             }
             
-            if($count > 1){
-                break;
-            }
+            // if($count > 1){
+            //     break;
+            // }
         }
         echo "Total waktu: ".$total_waktu;
     }
