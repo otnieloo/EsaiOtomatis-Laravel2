@@ -127,3 +127,7 @@ a.login-button{
     font-size: .8rem;
     border-radius: 10rem;
 }
+
+.loginCard,.registerCard{
+    margin-bottom: 7rem;
+}

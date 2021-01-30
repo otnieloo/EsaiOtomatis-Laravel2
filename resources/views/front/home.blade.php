@@ -10,7 +10,7 @@
         <img src="{{ url('/images/bg.png')}}" alt="">
     </div>
 
-    <div class="mid">
+    {{-- <div class="mid">
         <h2>How to use?</h2>
         <div class="text-mid">
             <div class="p">
@@ -20,5 +20,5 @@
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veniam amet deserunt distinctio qui doloribus quas debitis, reprehenderit totam, exercitationem minima esse dolore reiciendis odio laborum dolor harum eos sed perferendis quasi, repellendus a? Explicabo harum consequatur culpa? Possimus veniam earum praesentium quam aspernatur nisi, provident corrupti architecto eos quisquam nobis?
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
