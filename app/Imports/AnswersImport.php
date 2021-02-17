@@ -77,51 +77,51 @@ class AnswersImport implements ToCollection
                         $jawaban = Answer::where('id_soal',$id_soal)
                                         ->where('id_siswa',$id_siswa)
                                         ->first();
-                        if($similaritas->cosine1 >= 0.7){
-                            $nilai_konversi = 2;
-                        }else if($similaritas->cosine1 >= 0.4){
-                            $nilai_konversi = 1;
-                        }else if($similaritas->cosine1 >= 0.1){
-                            $nilai_konversi = 0.5;
-                        }else{
-                            $nilai_konversi = 0;
-                        }
+                        if(!is_null($similaritas)){
+                            if($similaritas->cosine1 >= 0.7){
+                                $nilai_konversi = 2;
+                            }else if($similaritas->cosine1 >= 0.4){
+                                $nilai_konversi = 1;
+                            }else if($similaritas->cosine1 >= 0.1){
+                                $nilai_konversi = 0.5;
+                            }else{
+                                $nilai_konversi = 0;
+                            }
 
-                        if($similaritas->cosine2 >= 0.7){
-                            $nilai_konversiqe = 2;
-                        }else if($similaritas->cosine2 >= 0.4){
-                            $nilai_konversiqe = 1;
-                        }else if($similaritas->cosine2 >= 0.1){
-                            $nilai_konversiqe = 0.5;
-                        }else{
-                            $nilai_konversiqe = 0;
-                        }
+                            if($similaritas->cosine2 >= 0.7){
+                                $nilai_konversiqe = 2;
+                            }else if($similaritas->cosine2 >= 0.4){
+                                $nilai_konversiqe = 1;
+                            }else if($similaritas->cosine2 >= 0.1){
+                                $nilai_konversiqe = 0.5;
+                            }else{
+                                $nilai_konversiqe = 0;
+                            }
 
-                        $data = [
-                            'id_jawaban'          => $jawaban->id_jawaban,
-                            'id_soal'          => $id_soal,
-                            'nilai_similaritas'   => $similaritas->cosine1,
-                            'nilai_similaritasqe' => $similaritas->cosine2,
-                            'nilai_sistem'        => $similaritas->cosine2,
-                            'nilai_konversi'        => $nilai_konversi,
-                            'nilai_konversiqe'        => $nilai_konversiqe
-                        ];
-                        $sim = Similarity::create($data);
-                        if($sim){
-                            echo 'similarity ok, ';
+                            $data = [
+                                'id_jawaban'          => $jawaban->id_jawaban,
+                                'id_soal'          => $id_soal,
+                                'nilai_similaritas'   => $similaritas->cosine1,
+                                'nilai_similaritasqe' => $similaritas->cosine2,
+                                'nilai_sistem'        => $similaritas->cosine2,
+                                'nilai_konversi'        => $nilai_konversi,
+                                'nilai_konversiqe'        => $nilai_konversiqe
+                            ];
+                            $sim = Similarity::create($data);
+                            if($sim){
+                                echo 'similarity ok, ';
+                            }
+                            $total_nilai[] = $similaritas->cosine1;
+                            $total_nilaiqe[] = $similaritas->cosine2;
+                            $total_nilai_konversi[] = $nilai_konversi;
+                            $total_nilai_konversiqe[] = $nilai_konversiqe;
+                        }else{
+                            echo $id_soal;
+                            echo '<br>';
+                            echo $j;
+                            dump($similaritas);
+                            dd('API Offline');
                         }
-                        $total_nilai[] = $similaritas->cosine1;
-                        $total_nilaiqe[] = $similaritas->cosine2;
-                        $total_nilai_konversi[] = $nilai_konversi;
-                        $total_nilai_konversiqe[] = $nilai_konversiqe;
-                        // if(isset($similaritas)){
-                        // }else{
-                            // echo $id_soal;
-                            // echo '<br>';
-                            // echo $j;
-                            // dump($similaritas);
-                            // dd('API Offline');
-                        // }
                         $count++;
                     }catch(QueryException $e){
                         dd($e->errorInfo);

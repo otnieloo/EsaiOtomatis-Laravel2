@@ -294,45 +294,45 @@ class SiswaController extends Controller
                     $jawaban = Answer::where('id_soal',$id_soal)
                                     ->where('id_siswa',$this->siswa[0]->id_siswa)
                                     ->first();
-                    if($similaritas->cosine1 >= 0.7){
-                        $nilai_konversi = 2;
-                    }else if($similaritas->cosine1 >= 0.4){
-                        $nilai_konversi = 1;
-                    }else if($similaritas->cosine1 >= 0.1){
-                        $nilai_konversi = 0.5;
-                    }else{
-                        $nilai_konversi = 0;
-                    }
-
-                    if($similaritas->cosine2 >= 0.7){
-                        $nilai_konversiqe = 2;
-                    }else if($similaritas->cosine2 >= 0.4){
-                        $nilai_konversiqe = 1;
-                    }else if($similaritas->cosine2 >= 0.1){
-                        $nilai_konversiqe = 0.5;
-                    }else{
-                        $nilai_konversiqe = 0;
-                    }
-                    
-                    $data = [
-                        'id_jawaban'          => $jawaban->id_jawaban,
-                        'id_soal'          => $id_soal,
-                        'nilai_similaritas'   => $similaritas->cosine1,
-                        'nilai_similaritasqe' => $similaritas->cosine2,
-                        'nilai_sistem'        => $similaritas->cosine2,
-                        'nilai_konversi'        => $nilai_konversi,
-                        'nilai_konversiqe'        => $nilai_konversiqe
-                    ];
-                    Similarity::create($data);
-                    $total_nilai[] = $similaritas->cosine1;
-                    $total_nilaiqe[] = $similaritas->cosine2;
-                    $total_nilai_konversi[] = $nilai_konversi;
-                    $total_nilai_konversiqe[] = $nilai_konversiqe;
-                    // if(isset($similaritas)){
+                    if(!is_null($similaritas)){
                         
-                    // }else{
-                    //     dd('API Offline');
-                    // }
+                        if($similaritas->cosine1 >= 0.7){
+                            $nilai_konversi = 2;
+                        }else if($similaritas->cosine1 >= 0.4){
+                            $nilai_konversi = 1;
+                        }else if($similaritas->cosine1 >= 0.1){
+                            $nilai_konversi = 0.5;
+                        }else{
+                            $nilai_konversi = 0;
+                        }
+
+                        if($similaritas->cosine2 >= 0.7){
+                            $nilai_konversiqe = 2;
+                        }else if($similaritas->cosine2 >= 0.4){
+                            $nilai_konversiqe = 1;
+                        }else if($similaritas->cosine2 >= 0.1){
+                            $nilai_konversiqe = 0.5;
+                        }else{
+                            $nilai_konversiqe = 0;
+                        }
+                        
+                        $data = [
+                            'id_jawaban'          => $jawaban->id_jawaban,
+                            'id_soal'          => $id_soal,
+                            'nilai_similaritas'   => $similaritas->cosine1,
+                            'nilai_similaritasqe' => $similaritas->cosine2,
+                            'nilai_sistem'        => $similaritas->cosine2,
+                            'nilai_konversi'        => $nilai_konversi,
+                            'nilai_konversiqe'        => $nilai_konversiqe
+                        ];
+                        Similarity::create($data);
+                        $total_nilai[] = $similaritas->cosine1;
+                        $total_nilaiqe[] = $similaritas->cosine2;
+                        $total_nilai_konversi[] = $nilai_konversi;
+                        $total_nilai_konversiqe[] = $nilai_konversiqe;
+                    }else{
+                        dd('API Offline');
+                    }
                     $count++;
                 }catch(QueryException $e){
                     dd($e->errorInfo);
