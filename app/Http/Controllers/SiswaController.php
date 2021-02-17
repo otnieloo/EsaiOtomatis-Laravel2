@@ -331,7 +331,21 @@ class SiswaController extends Controller
                         $total_nilai_konversi[] = $nilai_konversi;
                         $total_nilai_konversiqe[] = $nilai_konversiqe;
                     }else{
-                        dd('API Offline');
+                        $data = [
+                            'id_jawaban'          => $jawaban->id_jawaban,
+                            'id_soal'          => $id_soal,
+                            'nilai_similaritas'   =>0,
+                            'nilai_similaritasqe' => 0,
+                            'nilai_sistem'        => 0,
+                            'nilai_konversi'        => 0,
+                            'nilai_konversiqe'        => 0
+                        ];
+                        Similarity::create($data);
+                        $total_nilai[] = 0;
+                        $total_nilaiqe[] = 0;
+                        $total_nilai_konversi[] = 0;
+                        $total_nilai_konversiqe[] = 0;
+                        // dd('API Offline');
                     }
                     $count++;
                 }catch(QueryException $e){
