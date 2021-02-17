@@ -116,6 +116,7 @@ class AnswersImport implements ToCollection
                             $total_nilai_konversi[] = $nilai_konversi;
                             $total_nilai_konversiqe[] = $nilai_konversiqe;
                         }else{
+                            dump($similaritas);
                             dd('API Offline');
                         }
                         $count++;
