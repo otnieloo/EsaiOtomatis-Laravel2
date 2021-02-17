@@ -460,7 +460,7 @@ class SiswaController extends Controller
 
     public function addAnswers()
     {
-        Excel::import(new AnswersImport('1','1'), 'def.xlsx');
+        Excel::import(new AnswersImport('7','1'), 'def.xlsx');
     }
 
 
