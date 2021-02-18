@@ -59,7 +59,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/siswa">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Lihat Ujian</span></a>
             </li>
 
             <!-- Divider -->

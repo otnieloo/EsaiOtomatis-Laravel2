@@ -58,7 +58,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/pengajar">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Lihat Ujian</span></a>
             </li>
 
             <!-- Divider -->
