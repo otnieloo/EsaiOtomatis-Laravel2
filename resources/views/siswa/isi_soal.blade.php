@@ -56,7 +56,7 @@
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <button class="btn btn-primary mx-auto w-25">Submit</button>
+                                        <button class="btn btn-primary mx-auto w-25 btnIsiUjian">Submit</button>
                                     </td>
                                 </tr>
                             </table>
@@ -107,7 +107,7 @@
                 }
             }, 1000);
 
-            $('.isiUjian').one('submit',function(e){
+            $('.btnIsiUjian').on('click',function(e){
                 e.preventDefault();
                 Swal.fire({
                     title: 'Anda yakin? Cek kembali jawaban anda dan pastikan tidak ada kesalahan penulisan (Typo) karena akan mempengaruhi hasil.',
@@ -118,7 +118,7 @@
                 }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) {
-                        $(this).submit();
+                        $('.isiUjian').submit();
                     } else if (result.isDenied) {
                         // Swal.fire('Changes are not saved', '', 'info')
                     }
