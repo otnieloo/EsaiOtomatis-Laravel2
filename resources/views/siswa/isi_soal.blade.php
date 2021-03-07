@@ -34,7 +34,7 @@
                         <h1 class="h3 mb-2 text-gray-800 text-center">Soal Ujian {{$ujian->nama}}</h1>
                         <hr>
                         <h5 class="text-right" id="timerCountdown"></h5>
-                        <form action="/isi_ujian" method="post">
+                        <form action="/isi_ujian" method="post" class="isiUjian" id="isiUjian">
                             {{ csrf_field()}}
                             <input type="hidden" name="id" value="{{$id_hash}}">
                             <table class="table">
@@ -106,6 +106,24 @@
                     document.getElementById("demo").innerHTML = "EXPIRED";
                 }
             }, 1000);
+
+            $('.isiUjian').one('submit',function(e){
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Anda yakin? Cek kembali jawaban anda dan pastikan tidak ada kesalahan penulisan (Typo) karena akan mempengaruhi hasil.',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: `Yakin`,
+                    denyButtonText: `Belum Yakin`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $(this).submit();
+                    } else if (result.isDenied) {
+                        // Swal.fire('Changes are not saved', '', 'info')
+                    }
+                })
+            })
 
         });
     </script>
